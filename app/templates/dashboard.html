@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova — Social Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../static/css/dashboard.css">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">N</div>
+    Nova
+  </div>
+
+  <nav class="nav">
+    <div class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Home
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Explore
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Notifications
+      <span class="badge">8</span>
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Messages
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      Bookmarks
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Groups
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profile
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      Settings
+    </div>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <div class="premium-card">
+      <h4>⭐ Go Premium</h4>
+      <p>Unlock exclusive features and support Nova.</p>
+      <button class="btn-premium">Upgrade Now</button>
+    </div>
+    <div class="profile-row">
+      <div class="avatar-initials" style="background: linear-gradient(135deg,#4f6ef7,#a855f7);">AV</div>
+      <div class="profile-info">
+        <div class="name">Arjun Verma</div>
+        <div class="handle">@arjunv</div>
+      </div>
+      <button class="dots-btn">⋯</button>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN FEED -->
+<main class="main">
+  <div class="topbar">
+    <div class="page-title">Home</div>
+    <div class="search-bar">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" placeholder="Search Nova…">
+    </div>
+    <div class="topbar-actions">
+      <button class="btn-create">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Create Post
+      </button>
+      <div class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </div>
+      <div class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="feed">
+
+    <!-- Stories -->
+    <div class="stories-row">
+      <div class="story">
+        <div class="story-avatar-wrap create">
+          <span class="story-plus">+</span>
+        </div>
+        <span class="story-name">Create</span>
+      </div>
+      <div class="story">
+        <div class="story-avatar-wrap">
+          <div class="story-avatar-container">
+            <div class="story-initials" style="background:linear-gradient(135deg,#f43f5e,#fb923c);">A</div>
+            <div class="online-dot"></div>
+          </div>
+        </div>
+        <span class="story-name">Ariana</span>
+      </div>
+      <div class="story">
+        <div class="story-avatar-wrap" style="background:linear-gradient(135deg,#6366f1,#06b6d4);">
+          <div class="story-initials" style="background:linear-gradient(135deg,#1e1b4b,#164e63);">R</div>
+        </div>
+        <span class="story-name">Rohan</span>
+      </div>
+      <div class="story">
+        <div class="story-avatar-wrap" style="background:linear-gradient(135deg,#a855f7,#ec4899);">
+          <div class="story-initials" style="background:linear-gradient(135deg,#2d1b5a,#4a1942);">M</div>
+        </div>
+        <span class="story-name">Meera</span>
+      </div>
+      <div class="story">
+        <div class="story-avatar-wrap" style="background:linear-gradient(135deg,#0ea5e9,#22d3ee);">
+          <div class="story-initials" style="background:linear-gradient(135deg,#0c2440,#0a3040);">K</div>
+        </div>
+        <span class="story-name">Kabir</span>
+      </div>
+      <div class="story">
+        <div class="story-avatar-wrap" style="background:linear-gradient(135deg,#f97316,#fbbf24);">
+          <div class="story-initials" style="background:linear-gradient(135deg,#431407,#451a03);">D</div>
+        </div>
+        <span class="story-name">Diya</span>
+      </div>
+      <div class="story">
+        <div class="story-avatar-wrap" style="background:linear-gradient(135deg,#10b981,#6ee7b7);">
+          <div class="story-initials" style="background:linear-gradient(135deg,#022c22,#064e3b);">V</div>
+        </div>
+        <span class="story-name">Vivaan</span>
+      </div>
+    </div>
+
+    <!-- Compose -->
+    <div class="compose-card">
+      <div class="compose-top">
+        <div class="avatar-initials" style="background:linear-gradient(135deg,#4f6ef7,#a855f7); width:40px; height:40px; font-size:14px;">AV</div>
+        <div class="compose-input">What's on your mind, Arjun?</div>
+      </div>
+      <div class="compose-actions">
+        <button class="compose-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
+          Photo
+        </button>
+        <button class="compose-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          Video
+        </button>
+        <button class="compose-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/><line x1="15" y1="9" x2="15" y2="21"/></svg>
+          Poll
+        </button>
+        <button class="compose-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          Feeling
+        </button>
+        <button class="btn-post">Post</button>
+      </div>
+    </div>
+
+    <!-- Post 1 — Sunset -->
+    <div class="post-card" style="animation-delay:0.05s">
+      <div class="post-header">
+        <div class="avatar-initials" style="background:linear-gradient(135deg,#a855f7,#ec4899);width:42px;height:42px;font-size:15px;">MK</div>
+        <div class="post-meta">
+          <div class="author">Meera Kapoor <span>@meerak · 2h</span></div>
+        </div>
+        <button class="more-btn">⋯</button>
+      </div>
+      <div class="post-text">Sunsets never get old 🌅</div>
+
+      <!-- Sunset illustration -->
+      <div class="img-placeholder gradient-sunset">
+        <div class="mountain-silhouette"></div>
+        <div class="water-reflection"></div>
+        <div class="sky-star" style="width:2px;height:2px;top:8%;left:20%;opacity:0.9;"></div>
+        <div class="sky-star" style="width:1.5px;height:1.5px;top:12%;left:35%;opacity:0.7;"></div>
+        <div class="sky-star" style="width:2px;height:2px;top:6%;left:55%;opacity:0.8;"></div>
+        <div class="sky-star" style="width:1px;height:1px;top:15%;left:70%;opacity:0.6;"></div>
+        <div class="sky-star" style="width:2px;height:2px;top:9%;left:80%;opacity:0.9;"></div>
+        <div class="sky-star" style="width:1.5px;height:1.5px;top:4%;left:88%;opacity:0.7;"></div>
+      </div>
+
+      <div class="post-actions">
+        <button class="action-btn liked" onclick="toggleLike(this)">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span>128</span>
+        </button>
+        <button class="action-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>32</span>
+        </button>
+        <button class="action-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          <span>16</span>
+        </button>
+        <button class="bookmark-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Post 2 — Code + lo-fi -->
+    <div class="post-card" style="animation-delay:0.1s">
+      <div class="post-header">
+        <div class="avatar-initials" style="background:linear-gradient(135deg,#0ea5e9,#22d3ee);width:42px;height:42px;font-size:15px;">KM</div>
+        <div class="post-meta">
+          <div class="author">Kabir Malhotra <span>@kabirm · 4h</span></div>
+        </div>
+        <button class="more-btn">⋯</button>
+      </div>
+      <div class="post-text">Coffee, code and lo-fi beats ☕💻🎧</div>
+
+      <div class="code-img-grid">
+        <div class="code-img code-dark">
+          <div><span class="code-keyword">const</span> <span class="code-var">api</span> = <span class="code-fn">fetch</span>(</div>
+          <div style="padding-left:12px"><span class="code-str">'/v1/posts'</span>,</div>
+          <div style="padding-left:12px">{ <span class="code-var">method</span>: <span class="code-str">'GET'</span> }</div>
+          <div>);</div>
+          <div>&nbsp;</div>
+          <div><span class="code-fn">api</span>.<span class="code-fn">then</span>(res => {</div>
+          <div style="padding-left:12px"><span class="code-var">posts</span>.<span class="code-fn">set</span>(res);</div>
+          <div style="padding-left:12px"><span class="code-fn">render</span>();</div>
+          <div>});</div>
+          <div>&nbsp;</div>
+          <div><span class="code-comment">// load more on scroll</span></div>
+          <div><span class="code-fn">window</span>.<span class="code-fn">onscroll</span> = () => {</div>
+          <div style="padding-left:12px"><span class="code-keyword">if</span> (<span class="code-fn">near</span>(<span class="code-str">'bottom'</span>))</div>
+          <div style="padding-left:24px"><span class="code-fn">loadMore</span>();</div>
+          <div>};</div>
+        </div>
+        <div class="code-img lo-fi">
+          <svg width="60" height="60" viewBox="0 0 60 60" fill="none" style="opacity:0.7">
+            <circle cx="30" cy="30" r="28" stroke="#4f6ef7" stroke-width="1.5"/>
+            <circle cx="30" cy="30" r="18" stroke="#a855f7" stroke-width="1" opacity="0.6"/>
+            <circle cx="30" cy="30" r="6" fill="#4f6ef7" opacity="0.8"/>
+            <line x1="30" y1="2" x2="30" y2="10" stroke="#4f6ef7" stroke-width="1.5"/>
+            <line x1="30" y1="50" x2="30" y2="58" stroke="#4f6ef7" stroke-width="1.5"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="post-actions">
+        <button class="action-btn" onclick="toggleLike(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span>74</span>
+        </button>
+        <button class="action-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>19</span>
+        </button>
+        <button class="action-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          <span>8</span>
+        </button>
+        <button class="bookmark-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- RIGHT SIDEBAR -->
+<aside class="right-sidebar">
+
+  <!-- Messages -->
+  <div class="right-section" style="max-height: 320px;">
+    <div class="section-header">
+      <span class="section-title">Messages</span>
+      <span class="external-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </span>
+    </div>
+
+    <div class="msg-item">
+      <div class="msg-avatar">
+        <div class="avatar-initials" style="background:linear-gradient(135deg,#6366f1,#06b6d4);">RS</div>
+        <div class="online-dot" style="bottom:-1px;right:-1px;"></div>
+      </div>
+      <div class="msg-content">
+        <div class="msg-name">Rohan Singh</div>
+        <div class="msg-preview">Hey! Are we still on for…</div>
+      </div>
+      <div class="msg-right">
+        <span class="msg-time">11:30 AM</span>
+        <span class="msg-badge">2</span>
+      </div>
+    </div>
+
+    <div class="msg-item">
+      <div class="msg-avatar">
+        <div class="avatar-initials" style="background:linear-gradient(135deg,#ec4899,#f43f5e);">DS</div>
+      </div>
+      <div class="msg-content">
+        <div class="msg-name">Diya Sharma</div>
+        <div class="msg-preview">Sent you a photo</div>
+      </div>
+      <div class="msg-right">
+        <span class="msg-time">10:45 AM</span>
+        <span class="msg-badge">1</span>
+      </div>
+    </div>
+
+    <div class="msg-item">
+      <div class="msg-avatar">
+        <div class="avatar-initials" style="background:linear-gradient(135deg,#f97316,#fbbf24);">AP</div>
+      </div>
+      <div class="msg-content">
+        <div class="msg-name">Arnav Patel</div>
+        <div class="msg-preview">Sounds good!</div>
+      </div>
+      <div class="msg-right">
+        <span class="msg-time">Yesterday</span>
+      </div>
+    </div>
+
+    <div class="msg-item">
+      <div class="msg-avatar">
+        <div class="avatar-initials" style="background:linear-gradient(135deg,#a855f7,#ec4899);">MK</div>
+      </div>
+      <div class="msg-content">
+        <div class="msg-name">Meera Kapoor</div>
+        <div class="msg-preview">Let's catch up soon</div>
+      </div>
+      <div class="msg-right">
+        <span class="msg-time">Yesterday</span>
+      </div>
+    </div>
+
+    <div class="msg-item">
+      <div class="msg-avatar">
+        <div class="avatar-initials" style="background:linear-gradient(135deg,#10b981,#6ee7b7);">VS</div>
+      </div>
+      <div class="msg-content">
+        <div class="msg-name">Vivaan Shah</div>
+        <div class="msg-preview">Thanks a lot!</div>
+      </div>
+      <div class="msg-right">
+        <span class="msg-time">2d</span>
+      </div>
+    </div>
+
+    <span class="view-all">View all messages</span>
+  </div>
+
+  <!-- Online Now -->
+  <div class="right-section">
+    <div class="section-header">
+      <span class="section-title">Online Now</span>
+      <button class="see-all">See all</button>
+    </div>
+
+    <div class="online-item">
+      <div style="position:relative">
+        <div class="avatar-initials" style="background:linear-gradient(135deg,#6366f1,#06b6d4);">RS</div>
+        <div class="online-dot" style="bottom:-1px;right:-1px;width:9px;height:9px;border-color:var(--bg-card2)"></div>
+      </div>
+      <span class="name">Rohan Singh</span>
+    </div>
+    <div class="online-item">
+      <div style="position:relative">
+        <div class="avatar-initials" style="background:linear-gradient(135deg,#ec4899,#f43f5e);">DS</div>
+        <div class="online-dot" style="bottom:-1px;right:-1px;width:9px;height:9px;border-color:var(--bg-card2)"></div>
+      </div>
+      <span class="name">Diya Sharma</span>
+    </div>
+    <div class="online-item">
+      <div style="position:relative">
+        <div class="avatar-initials" style="background:linear-gradient(135deg,#f97316,#fbbf24);">AP</div>
+        <div class="online-dot" style="bottom:-1px;right:-1px;width:9px;height:9px;border-color:var(--bg-card2)"></div>
+      </div>
+      <span class="name">Arnav Patel</span>
+    </div>
+    <div class="online-item">
+      <div style="position:relative">
+        <div class="avatar-initials" style="background:linear-gradient(135deg,#a855f7,#ec4899);">MK</div>
+        <div class="online-dot" style="bottom:-1px;right:-1px;width:9px;height:9px;border-color:var(--bg-card2)"></div>
+      </div>
+      <span class="name">Meera Kapoor</span>
+    </div>
+    <div class="online-item">
+      <div style="position:relative">
+        <div class="avatar-initials" style="background:linear-gradient(135deg,#0ea5e9,#22d3ee);">KM</div>
+        <div class="online-dot" style="bottom:-1px;right:-1px;width:9px;height:9px;border-color:var(--bg-card2)"></div>
+      </div>
+      <span class="name">Kabir Malhotra</span>
+    </div>
+  </div>
+
+  <!-- Suggested -->
+  <div class="right-section">
+    <div class="section-header">
+      <span class="section-title">Suggested for you</span>
+      <button class="see-all">See all</button>
+    </div>
+
+    <div class="suggest-item">
+      <div class="avatar-initials" style="background:linear-gradient(135deg,#f43f5e,#fb923c);">IR</div>
+      <div class="suggest-info">
+        <div class="name">Ishita Rao</div>
+        <div class="handle">@ishitar</div>
+      </div>
+      <button class="btn-follow" onclick="toggleFollow(this)">Follow</button>
+    </div>
+    <div class="suggest-item">
+      <div class="avatar-initials" style="background:linear-gradient(135deg,#8b5cf6,#06b6d4);">NV</div>
+      <div class="suggest-info">
+        <div class="name">Nikhil Verma</div>
+        <div class="handle">@nikhilv</div>
+      </div>
+      <button class="btn-follow" onclick="toggleFollow(this)">Follow</button>
+    </div>
+    <div class="suggest-item">
+      <div class="avatar-initials" style="background:linear-gradient(135deg,#10b981,#3b82f6);">SK</div>
+      <div class="suggest-info">
+        <div class="name">Sara Khan</div>
+        <div class="handle">@sarak</div>
+      </div>
+      <button class="btn-follow" onclick="toggleFollow(this)">Follow</button>
+    </div>
+  </div>
+
+</aside>
+<script src="../static/js/dashboard.js"></script>
+</body>
+</html>
