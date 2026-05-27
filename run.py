@@ -5,7 +5,7 @@ import os
 
 # Load .env file
 load_dotenv()
-
+..............
 app = Flask(__name__)
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
