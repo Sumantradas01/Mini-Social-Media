@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // NO LOGIN
   if (!currentUser) {
 
-    window.location.href = "register.html";
+    window.location.href = "dashboard.html";
     return;
 
   }
