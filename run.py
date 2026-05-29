@@ -1,22 +1,15 @@
 from flask import Flask, render_template, request, redirect, flash, session
 from supabase import create_client
 from dotenv import load_dotenv
-from datetime import datetime
+from datetime import datetime, date
+import pytz
 import os
 import re
-
-# =====================================
-# LOAD ENV
-# =====================================
 
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = "secret123"
-
-# =====================================
-# SUPABASE
-# =====================================
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
@@ -26,18 +19,15 @@ supabase = create_client(
     SUPABASE_KEY
 )
 
-# =====================================
-# HOME PAGE
-# =====================================
 
 @app.route("/")
 def home():
     return render_template("register.html")
 
 
-# =====================================
-# REGISTER USER
-# =====================================
+# ==================================
+# REGISTER
+# ==================================
 
 @app.route("/register", methods=["POST"])
 def register():
@@ -48,65 +38,116 @@ def register():
         username = request.form.get("username")
         email = request.form.get("email")
         phone = request.form.get("phone")
+        dob = request.form.get("DOB")
         password = request.form.get("password")
         confirm_password = request.form.get("confirm_password")
 
         # PASSWORD MATCH
+
         if password != confirm_password:
             flash("Passwords do not match.", "danger")
             return redirect("/")
 
-        # PASSWORD VALIDATION
+        # PHONE VALIDATION
+
+        if not re.match(r"^[6-9]\d{9}$", phone):
+            flash(
+                "Phone number must be valid Indian 10 digit mobile number.",
+                "danger"
+            )
+            return redirect("/")
+
+        # AGE VALIDATION
+
+        dob_date = datetime.strptime(
+            dob,
+            "%Y-%m-%d"
+        ).date()
+
+        today = date.today()
+
+        age = (
+            today.year -
+            dob_date.year
+        ) - (
+            (
+                today.month,
+                today.day
+            ) <
+            (
+                dob_date.month,
+                dob_date.day
+            )
+        )
+
+        if age < 18:
+            flash(
+                "Age must be 18 or above.",
+                "danger"
+            )
+            return redirect("/")
+
+        # PASSWORD RULES
+
         if len(password) < 8:
-            flash("Password must be at least 8 characters.", "danger")
+            flash("Minimum 8 characters required.", "danger")
             return redirect("/")
 
         if not re.search(r"[A-Z]", password):
-            flash("Password must contain uppercase letter.", "danger")
+            flash("One uppercase letter required.", "danger")
             return redirect("/")
 
         if not re.search(r"[0-9]", password):
-            flash("Password must contain number.", "danger")
+            flash("One number required.", "danger")
             return redirect("/")
 
         if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
-            flash("Password must contain special character.", "danger")
+            flash("One special character required.", "danger")
             return redirect("/")
 
-        # CHECK EMAIL
-        check_email = (
+        # EMAIL EXISTS
+
+        email_check = (
             supabase.table("users")
             .select("*")
             .eq("email", email)
             .execute()
         )
 
-        if check_email.data:
-            flash("Email already registered.", "danger")
+        if email_check.data:
+            flash("Email already exists.", "danger")
             return redirect("/")
 
-        # CHECK USERNAME
-        check_username = (
+        # USERNAME EXISTS
+
+        username_check = (
             supabase.table("users")
             .select("*")
             .eq("username", username)
             .execute()
         )
 
-        if check_username.data:
+        if username_check.data:
             flash("Username already exists.", "danger")
             return redirect("/")
 
-        # INSERT USER
+        india_time = datetime.now(
+            pytz.timezone("Asia/Kolkata")
+        )
+
         user_data = {
             "full_name": full_name,
             "username": username,
             "email": email,
             "phone": phone,
-            "password": password
+            "password": password,
+            "DOB": dob,
+            "time": india_time.isoformat()
         }
 
-        supabase.table("users").insert(user_data).execute()
+        supabase.table("users").insert(
+            user_data
+        ).execute()
 
         flash(
             "Registration Successful! Please Login.",
@@ -117,16 +158,13 @@ def register():
 
     except Exception as e:
 
-        print("REGISTER ERROR:", e)
-
         flash(str(e), "danger")
-
         return redirect("/")
 
 
-# =====================================
-# LOGIN USER
-# =====================================
+# ==================================
+# LOGIN
+# ==================================
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -135,6 +173,8 @@ def login():
 
         email = request.form.get("email")
         password = request.form.get("password")
+
+        # CHECK USER
 
         response = (
             supabase.table("users")
@@ -146,90 +186,131 @@ def login():
 
         if not response.data:
 
-            flash("Invalid Email or Password.", "danger")
+            flash(
+                "Invalid Email or Password",
+                "danger"
+            )
+
             return redirect("/")
 
         user = response.data[0]
 
         # SAVE SESSION
+
         session["user_id"] = user["id"]
         session["username"] = user["username"]
         session["email"] = user["email"]
+        session["phone"] = user["phone"]
+        session["dob"] = user["DOB"]
+
+        # INDIA TIMEZONE
+
+        india_time = datetime.now(
+            pytz.timezone("Asia/Kolkata")
+        )
 
         # SAVE LOGIN HISTORY
-        login_data = {
-            "user_id": user["id"],
-            "email": user["email"]
-        }
 
-        supabase.table("login_history") \
-            .insert(login_data) \
+        history = (
+            supabase.table("login_history")
+            .insert({
+                "user_id": int(user["id"]),
+                "email": user["email"],
+                "login_time": india_time.isoformat()
+            })
             .execute()
+        )
+
+        print("LOGIN HISTORY =", history)
+
+        # SAVE LOGIN HISTORY ID
+
+        if history.data:
+
+            session["login_history_id"] = (
+                history.data[0]["id"]
+            )
+
+        flash(
+            "Login Successful!",
+            "success"
+        )
 
         return redirect("/dashboard")
 
     except Exception as e:
 
-        print("LOGIN ERROR:", e)
+        print("LOGIN ERROR =", e)
+
+        flash(
+            str(e),
+            "danger"
+        )
+
+        return redirect("/")
+
+
+# ==================================
+# DASHBOARD
+# ==================================
+
+@app.route("/dashboard")
+def dashboard():
+
+    if "user_id" not in session:
+        return redirect("/")
+
+    return render_template(
+        "dashboard.html",
+        username=session["username"],
+        email=session["email"],
+        phone=session["phone"],
+        dob=session["dob"]
+    )
+
+
+# ==================================
+# LOGOUT
+# ==================================
+
+@app.route("/logout")
+def logout():
+
+    try:
+
+        if "login_history_id" in session:
+
+            india_time = datetime.now(
+                pytz.timezone("Asia/Kolkata")
+            )
+
+            supabase.table("login_history")\
+                .update({
+                    "logout_time": india_time.isoformat()
+                })\
+                .eq(
+                    "id",
+                    session["login_history_id"]
+                )\
+                .execute()
+
+        session.clear()
+
+        flash(
+            "Logged out successfully.",
+            "success"
+        )
+
+        return redirect("/")
+
+    except Exception as e:
+
+        print("LOGOUT ERROR =", e)
 
         flash(str(e), "danger")
 
         return redirect("/")
 
 
-# =====================================
-# DASHBOARD
-# =====================================
-
-@app.route("/dashboard")
-def dashboard():
-
-    # USER NOT LOGGED IN
-    if "user_id" not in session:
-
-        flash(
-            "Please login first.",
-            "danger"
-        )
-
-        return redirect("/")
-
-    return render_template(
-        "dashboard.html",
-        username=session["username"],
-        email=session["email"]
-    )
-
-
-# =====================================
-# LOGOUT
-# =====================================
-
-@app.route("/logout")
-def logout():
-
-    user_id = session.get("user_id")
-
-    # Update logout timestamp
-    if user_id:
-        supabase.table("login_history").update({
-            "Logout": datetime.isoformat()
-        }).eq("id", user_id).execute()
-
-    session.clear()
-
-    flash(
-        "Logged out successfully.",
-        "success"
-    )
-
-    return redirect("/")
-
-# =====================================
-# RUN
-# =====================================
-
 if __name__ == "__main__":
-    app.run(
-        debug=True
-    )
+    app.run(debug=True)
