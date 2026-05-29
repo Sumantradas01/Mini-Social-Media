@@ -1,36 +1,42 @@
-
 from flask import Flask, render_template, request, redirect, flash, session
 from supabase import create_client
 from dotenv import load_dotenv
 import os
 import re
 
-# ======================================
-# LOAD ENVIRONMENT VARIABLES
-# ======================================
+# =====================================
+# LOAD ENV
+# =====================================
 
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = "secret123"
 
+# =====================================
+# SUPABASE
+# =====================================
+
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+supabase = create_client(
+    SUPABASE_URL,
+    SUPABASE_KEY
+)
 
-# ======================================
+# =====================================
 # HOME PAGE
-# ======================================
+# =====================================
 
 @app.route("/")
 def home():
     return render_template("register.html")
 
 
-# ======================================
+# =====================================
 # REGISTER USER
-# ======================================
+# =====================================
 
 @app.route("/register", methods=["POST"])
 def register():
@@ -55,38 +61,38 @@ def register():
             return redirect("/")
 
         if not re.search(r"[A-Z]", password):
-            flash("Password must contain at least 1 uppercase letter.", "danger")
+            flash("Password must contain uppercase letter.", "danger")
             return redirect("/")
 
         if not re.search(r"[0-9]", password):
-            flash("Password must contain at least 1 number.", "danger")
+            flash("Password must contain number.", "danger")
             return redirect("/")
 
         if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
-            flash("Password must contain at least 1 special character.", "danger")
+            flash("Password must contain special character.", "danger")
             return redirect("/")
 
         # CHECK EMAIL
-        existing_email = (
+        check_email = (
             supabase.table("users")
             .select("*")
             .eq("email", email)
             .execute()
         )
 
-        if existing_email.data:
+        if check_email.data:
             flash("Email already registered.", "danger")
             return redirect("/")
 
         # CHECK USERNAME
-        existing_username = (
+        check_username = (
             supabase.table("users")
             .select("*")
             .eq("username", username)
             .execute()
         )
 
-        if existing_username.data:
+        if check_username.data:
             flash("Username already exists.", "danger")
             return redirect("/")
 
@@ -101,22 +107,25 @@ def register():
 
         supabase.table("users").insert(user_data).execute()
 
-        flash("Registration Successful! Please login.", "success")
+        flash(
+            "Registration Successful! Please Login.",
+            "success"
+        )
 
         return redirect("/")
 
     except Exception as e:
 
-        print(e)
+        print("REGISTER ERROR:", e)
 
         flash(str(e), "danger")
 
         return redirect("/")
 
 
-# ======================================
+# =====================================
 # LOGIN USER
-# ======================================
+# =====================================
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -141,40 +150,47 @@ def login():
 
         user = response.data[0]
 
-        # SESSION
+        # SAVE SESSION
         session["user_id"] = user["id"]
         session["username"] = user["username"]
         session["email"] = user["email"]
 
         # SAVE LOGIN HISTORY
-        login_history = {
+        login_data = {
             "user_id": user["id"],
             "email": user["email"]
         }
 
-        supabase.table("login_history").insert(login_history).execute()
-
-        flash("Login Successful!", "success")
+        supabase.table("login_history") \
+            .insert(login_data) \
+            .execute()
 
         return redirect("/dashboard")
 
     except Exception as e:
 
-        print(e)
+        print("LOGIN ERROR:", e)
 
         flash(str(e), "danger")
 
-        return render_template("dashboard.html")
+        return redirect("/")
 
 
-# ======================================
+# =====================================
 # DASHBOARD
-# ======================================
+# =====================================
 
 @app.route("/dashboard")
 def dashboard():
 
+    # USER NOT LOGGED IN
     if "user_id" not in session:
+
+        flash(
+            "Please login first.",
+            "danger"
+        )
+
         return redirect("/")
 
     return render_template(
@@ -184,23 +200,28 @@ def dashboard():
     )
 
 
-# ======================================
+# =====================================
 # LOGOUT
-# ======================================
+# =====================================
 
 @app.route("/logout")
 def logout():
 
     session.clear()
 
-    flash("Logged Out Successfully.", "success")
+    flash(
+        "Logged out successfully.",
+        "success"
+    )
 
     return redirect("/")
 
 
-# ======================================
-# START APP
-# ======================================
+# =====================================
+# RUN
+# =====================================
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(
+        debug=True
+    )
