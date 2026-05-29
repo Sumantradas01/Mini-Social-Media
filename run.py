@@ -213,7 +213,7 @@ def logout():
     # Update logout timestamp
     if user_id:
         supabase.table("login_history").update({
-            "logout": datetime.isoformat()
+            "Logout": datetime.isoformat()
         }).eq("id", user_id).execute()
 
     session.clear()
