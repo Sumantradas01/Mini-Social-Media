@@ -1,285 +1,446 @@
-
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 body{
-  font-family:'Poppins',sans-serif;
-  min-height:100vh;
-  overflow:hidden;
-  background:#071120;
-  color:white;
+    font-family:'Poppins',sans-serif;
+    min-height:100vh;
+    overflow:auto;
+    background:#071120;
+    color:white;
 }
 
-/* BACKGROUND */
+/* ======================
+   BACKGROUND
+====================== */
 
 .background{
-  position:absolute;
-  width:100%;
-  height:100%;
-  overflow:hidden;
+    position:fixed;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    z-index:0;
 }
 
 .circle{
-  position:absolute;
-  border-radius:50%;
-  filter:blur(80px);
+    position:absolute;
+    border-radius:50%;
+    filter:blur(80px);
 }
 
 .c1{
-  width:350px;
-  height:350px;
-  background:#005eff;
-  top:-100px;
-  left:-100px;
+    width:350px;
+    height:350px;
+    background:#005eff;
+    top:-100px;
+    left:-100px;
 }
 
 .c2{
-  width:300px;
-  height:300px;
-  background:#00aaff;
-  bottom:-100px;
-  right:-100px;
+    width:300px;
+    height:300px;
+    background:#00aaff;
+    bottom:-100px;
+    right:-100px;
 }
 
 .c3{
-  width:200px;
-  height:200px;
-  background:#003cff;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
+    width:250px;
+    height:250px;
+    background:#003cff;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
 }
 
-/* CONTAINER */
+/* ======================
+   MAIN CONTAINER
+====================== */
 
 .container{
-  position:relative;
-  z-index:10;
 
-  width:90%;
-  max-width:1200px;
+    position:relative;
+    z-index:10;
 
-  height:90vh;
+    width:90%;
+    max-width:1200px;
 
-  margin:5vh auto;
+    min-height:92vh;
 
-  display:flex;
+    margin:4vh auto;
 
-  background:rgba(255,255,255,0.05);
+    display:flex;
 
-  border:1px solid rgba(255,255,255,0.1);
+    background:rgba(255,255,255,0.05);
 
-  border-radius:30px;
+    border:1px solid rgba(255,255,255,0.1);
 
-  backdrop-filter:blur(20px);
+    border-radius:30px;
 
-  overflow:hidden;
+    backdrop-filter:blur(20px);
+
+    overflow:hidden;
 }
 
-/* LEFT */
+/* ======================
+   LEFT PANEL
+====================== */
 
 .left-panel{
-  flex:1;
-  padding:60px;
 
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
+    flex:1;
+
+    padding:60px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
 }
 
 .left-panel h1{
-  font-size:4rem;
-  font-weight:700;
 
-  background:linear-gradient(to right,#00c6ff,#0072ff);
+    font-size:4rem;
+    font-weight:700;
 
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+    background:linear-gradient(to right,#00c6ff,#0072ff);
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
 }
 
 .left-panel h2{
-  margin-top:20px;
-  font-size:2.5rem;
+
+    margin-top:20px;
+
+    font-size:2.7rem;
+
+    line-height:1.4;
 }
 
 .left-panel p{
-  margin-top:20px;
-  line-height:1.8;
-  color:#cbd5e1;
+
+    margin-top:25px;
+
+    line-height:1.8;
+
+    color:#cbd5e1;
+
+    max-width:500px;
 }
 
 .left-panel ul{
-  margin-top:30px;
-  list-style:none;
+
+    margin-top:30px;
+
+    list-style:none;
 }
 
 .left-panel ul li{
-  margin-bottom:15px;
+
+    margin-bottom:18px;
+
+    font-size:1rem;
+
+    color:#e2e8f0;
 }
 
-/* RIGHT */
+/* ======================
+   RIGHT PANEL
+====================== */
 
 .right-panel{
-  flex:1;
 
-  padding:50px;
+    flex:1;
 
-  display:flex;
-  justify-content:center;
-  align-items:center;
+    padding:40px;
+
+    overflow-y:auto;
+
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+
+    scrollbar-width:thin;
+    scrollbar-color:#00bfff transparent;
 }
 
+.right-panel::-webkit-scrollbar{
+    width:6px;
+}
+
+.right-panel::-webkit-scrollbar-thumb{
+    background:#00bfff;
+    border-radius:20px;
+}
+
+/* ======================
+   FORMS
+====================== */
+
 form{
-  width:100%;
-  max-width:420px;
+
+    width:100%;
+    max-width:420px;
+
+    padding-top:20px;
+    padding-bottom:20px;
 }
 
 #registerForm{
-  display:none;
+    display:none;
 }
 
 form h2{
-  font-size:2rem;
+
+    font-size:2rem;
+
+    margin-bottom:10px;
 }
 
 .subtitle{
-  color:#94a3b8;
-  margin-bottom:30px;
+
+    color:#94a3b8;
+
+    margin-bottom:30px;
 }
 
-/* INPUTS */
+/* ======================
+   INPUTS
+====================== */
 
 .input-group{
-  margin-bottom:18px;
+
+    margin-bottom:18px;
 }
 
 .input-group input{
-  width:100%;
-  padding:15px 18px;
 
-  border:none;
-  outline:none;
+    width:100%;
 
-  border-radius:14px;
+    padding:15px 18px;
 
-  background:rgba(255,255,255,0.08);
+    border:none;
+    outline:none;
 
-  color:white;
+    border-radius:14px;
 
-  font-size:15px;
+    background:rgba(255,255,255,0.08);
+
+    color:white;
+
+    font-size:15px;
+
+    transition:0.3s;
 }
 
 .input-group input:focus{
-  border:1px solid #00aaff;
+
+    border:1px solid #00aaff;
+
+    box-shadow:0 0 15px rgba(0,170,255,0.4);
 }
 
-/* PASSWORD */
+/* ======================
+   PASSWORD
+====================== */
 
 .password-box{
-  position:relative;
+    position:relative;
 }
 
 .toggle-password{
-  position:absolute;
-  right:15px;
-  top:50%;
-  transform:translateY(-50%);
-  cursor:pointer;
+
+    position:absolute;
+
+    right:15px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    cursor:pointer;
 }
 
-/* RULES */
+/* ======================
+   PASSWORD RULES
+====================== */
 
 .password-rules{
-  margin-top:-10px;
-  margin-bottom:20px;
+
+    margin-top:-8px;
+
+    margin-bottom:15px;
 }
 
 .password-rules p{
-  font-size:13px;
-  margin-bottom:5px;
+
+    margin-bottom:6px;
+
+    font-size:13px;
+
+    color:#94a3b8;
 }
 
-/* STRENGTH */
+/* ======================
+   PASSWORD STRENGTH
+====================== */
 
 .strength{
-  width:100%;
-  height:6px;
-  background:#1e293b;
 
-  border-radius:20px;
+    width:100%;
+    height:6px;
 
-  margin-bottom:20px;
+    background:#1e293b;
+
+    border-radius:20px;
+
+    margin-bottom:20px;
 }
 
 .strength-bar{
-  width:0%;
-  height:100%;
 
-  border-radius:20px;
+    height:100%;
+    width:0%;
 
-  transition:0.3s;
+    border-radius:20px;
+
+    transition:0.4s;
 }
 
-/* BUTTON */
+/* ======================
+   BUTTON
+====================== */
 
 .main-btn{
-  width:100%;
-  padding:15px;
 
-  border:none;
-  border-radius:14px;
+    width:100%;
 
-  background:linear-gradient(to right,#0072ff,#00c6ff);
+    padding:15px;
 
-  color:white;
+    border:none;
 
-  font-size:16px;
-  font-weight:600;
+    border-radius:14px;
 
-  cursor:pointer;
+    background:linear-gradient(
+        to right,
+        #0072ff,
+        #00c6ff
+    );
+
+    color:white;
+
+    font-size:16px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:0.3s;
 }
 
-/* SWITCH */
+.main-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 10px 25px rgba(0,114,255,0.4);
+}
+
+/* ======================
+   LOGIN / REGISTER LINKS
+====================== */
 
 .switch-text{
-  margin-top:20px;
-  text-align:center;
+
+    margin-top:20px;
+
+    text-align:center;
+
+    color:#94a3b8;
 }
 
 .switch-text a{
-  color:#00c6ff;
-  text-decoration:none;
+
+    color:#00c6ff;
+
+    text-decoration:none;
+
+    font-weight:600;
 }
 
-/* FLASH */
+.switch-text a:hover{
+
+    text-decoration:underline;
+}
+
+/* ======================
+   FLASH MESSAGE
+====================== */
 
 .flash{
-  padding:12px;
-  border-radius:10px;
-  margin-bottom:15px;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    margin-bottom:15px;
 }
 
 .success{
-  background:#00cc66;
+
+    background:#00cc66;
 }
 
 .danger{
-  background:#ff4d4d;
+
+    background:#ff4d4d;
 }
 
-/* MOBILE */
+/* ======================
+   MOBILE
+====================== */
 
 @media(max-width:900px){
 
-  .container{
-    flex-direction:column;
-    height:auto;
-  }
+    .container{
 
-  .left-panel{
-    display:none;
-  }
+        flex-direction:column;
+
+        min-height:auto;
+    }
+
+    .left-panel{
+
+        display:none;
+    }
+
+    .right-panel{
+
+        width:100%;
+
+        padding:25px;
+    }
+
+    form{
+
+        max-width:100%;
+    }
+}
+
+/* ======================
+   SHORT HEIGHT SCREENS
+====================== */
+
+@media(max-height:850px){
+
+    body{
+        overflow-y:auto;
+    }
+
+    .container{
+        min-height:92vh;
+    }
+
+    .right-panel{
+        overflow-y:auto;
+    }
 }
