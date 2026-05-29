@@ -3,13 +3,24 @@
 <head>
     <title>Nova Dashboard</title>
 </head>
-<body>
+
+<body style="background:#071120;color:white;font-family:Poppins;padding:40px;">
 
 <h1>Welcome {{ username }}</h1>
-<p>{{ email }}</p>
 
-<a href="/logout">Logout</a>
+<hr>
+
+<p>Email : {{ email }}</p>
+
+<p>Phone : {{ phone }}</p>
+
+<p>DOB : {{ dob }}</p>
+
+<br>
+
+<a href="/logout" style="color:#00c6ff;">
+Logout
+</a>
 
 </body>
 </html>
-

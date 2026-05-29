@@ -97,3 +97,81 @@ function updateRule(id, valid){
   }
 }
 
+// PHONE VALIDATION
+
+const phoneInput =
+document.getElementById("phone");
+
+if(phoneInput){
+
+phoneInput.addEventListener(
+"input",
+function(){
+
+this.value =
+this.value.replace(/\D/g,'');
+
+if(this.value.length > 10){
+this.value =
+this.value.slice(0,10);
+}
+
+});
+}
+
+
+// AGE CALCULATOR
+
+const dobInput =
+document.getElementById("dob");
+
+if(dobInput){
+
+dobInput.addEventListener(
+"change",
+function(){
+
+const dob =
+new Date(this.value);
+
+const today =
+new Date();
+
+let age =
+today.getFullYear()
+-
+dob.getFullYear();
+
+const monthDiff =
+today.getMonth()
+-
+dob.getMonth();
+
+if(
+monthDiff < 0 ||
+(
+monthDiff === 0 &&
+today.getDate()
+<
+dob.getDate()
+)
+){
+age--;
+}
+
+document.getElementById("age").value =
+age;
+
+if(age < 18){
+
+alert(
+"Age must be at least 18 years."
+);
+
+this.value = "";
+
+document.getElementById("age").value = "";
+}
+
+});
+}
