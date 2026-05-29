@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, flash, session
 from supabase import create_client
 from dotenv import load_dotenv
+from datetime import datetime
 import os
 import re
 
@@ -207,6 +208,14 @@ def dashboard():
 @app.route("/logout")
 def logout():
 
+    user_id = session.get("user_id")
+
+    # Update logout timestamp
+    if user_id:
+        supabase.table("login_history").update({
+            "logout": datetime.isoformat()
+        }).eq("id", user_id).execute()
+
     session.clear()
 
     flash(
@@ -215,7 +224,6 @@ def logout():
     )
 
     return redirect("/")
-
 
 # =====================================
 # RUN
