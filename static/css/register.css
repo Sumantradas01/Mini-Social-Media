@@ -83,6 +83,10 @@ body{
 
     overflow:hidden;
 }
+.container{
+    overflow:hidden;
+    height:92vh;
+}
 
 /* ======================
    LEFT PANEL
@@ -156,22 +160,33 @@ body{
 
     padding:40px;
 
-    overflow-y:auto;
-
     display:flex;
     justify-content:center;
     align-items:flex-start;
+
+    height:92vh;          /* FIXED HEIGHT */
+    overflow-y:auto;      /* ENABLE VERTICAL SCROLL */
 
     scrollbar-width:thin;
     scrollbar-color:#00bfff transparent;
 }
 
+/* Chrome / Edge / Brave */
 .right-panel::-webkit-scrollbar{
-    width:6px;
+    width:8px;
+}
+
+.right-panel::-webkit-scrollbar-track{
+    background:transparent;
 }
 
 .right-panel::-webkit-scrollbar-thumb{
-    background:#00bfff;
+    background:linear-gradient(
+        to bottom,
+        #00c6ff,
+        #0072ff
+    );
+
     border-radius:20px;
 }
 
