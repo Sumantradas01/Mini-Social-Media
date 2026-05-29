@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nova • Register</title>
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+  <title>Nova Authentication</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/register.css') }}">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
 </head>
 
 <body>
 
-<!-- Background -->
+<!-- BACKGROUND -->
 <div class="background">
   <div class="circle c1"></div>
   <div class="circle c2"></div>
   <div class="circle c3"></div>
 </div>
 
-<!-- Main Container -->
+<!-- CONTAINER -->
 <div class="container">
 
   <!-- LEFT PANEL -->
@@ -46,16 +51,17 @@
   <!-- RIGHT PANEL -->
   <div class="right-panel">
 
-    <!-- FORM -->
-    <form id="registerForm" method="POST" action="/register">
+    <!-- LOGIN FORM -->
+    <form id="loginForm"
+          method="POST"
+          action="/login">
 
-      <h2>Create Account</h2>
+      <h2>Login</h2>
 
       <p class="subtitle">
-        Join Nova today
+        Welcome Back
       </p>
 
-      <!-- Flash Messages -->
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
           {% for category, message in messages %}
@@ -66,130 +72,141 @@
         {% endif %}
       {% endwith %}
 
-      <!-- Full Name -->
       <div class="input-group">
-        <input
-          type="text"
-          name="full_name"
-          placeholder="Full Name"
-          required
-        >
+        <input type="email"
+               name="email"
+               placeholder="Email Address"
+               required>
       </div>
 
-      <!-- Username -->
-      <div class="input-group">
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          required
-        >
+      <div class="input-group password-box">
+
+        <input type="password"
+               id="login_password"
+               name="password"
+               placeholder="Password"
+               required>
+
+        <span class="toggle-password"
+              onclick="togglePassword('login_password')">
+          👁
+        </span>
+
       </div>
 
-      <!-- Email -->
-      <div class="input-group">
-        <input
-          type="email"
-          name="email"
-          placeholder="Email Address"
-          required
-        >
-      </div>
-
-      <!-- Phone -->
-      <div class="input-group">
-        <input
-          type="tel"
-          name="phone"
-          placeholder="Phone Number"
-        >
-      </div>
-
-      <!-- Password -->
-<div class="input-group password-box">
-
-  <input
-    type="password"
-    id="password"
-    name="password"
-    placeholder="Password"
-    required
-  >
-
-  <span
-    class="toggle-password"
-    onclick="togglePassword('password')"
-  >
-    👁
-  </span>
-
-</div>
-
-<!-- Password Rules -->
-<div class="password-rules">
-
-  <p id="rule-length">❌ Minimum 8 characters</p>
-
-  <p id="rule-uppercase">❌ At least 1 uppercase letter</p>
-
-  <p id="rule-number">❌ At least 1 number</p>
-
-  <p id="rule-special">❌ At least 1 special character</p>
-
-</div>
-      <br>
-
-<!-- Strength Bar -->
-<div class="strength">
-  <div class="strength-bar" id="strength-bar"></div>
-</div>
-
-<!-- Confirm Password -->
-<div class="input-group password-box">
-
-  <input
-    type="password"
-    id="confirm_password"
-    name="confirm_password"
-    placeholder="Confirm Password"
-    required
-  >
-
-  <span
-    class="toggle-password"
-    onclick="togglePassword('confirm_password')"
-  >
-    👁
-  </span>
-
-</div>
-      <!-- Submit -->
-      <button type="submit" class="register-btn">
-        Create Account
+      <button type="submit" class="main-btn">
+        Login
       </button>
 
-      <!-- Divider -->
-      <div class="divider">
-        <span>OR</span>
+      <p class="switch-text">
+        Don't have an account?
+        <a href="javascript:void(0);"
+           onclick="showRegister()">
+          Register
+        </a>
+      </p>
+
+    </form>
+
+    <!-- REGISTER FORM -->
+    <form id="registerForm"
+          method="POST"
+          action="/register">
+
+      <h2>Create Account</h2>
+
+      <p class="subtitle">
+        Join Nova today
+      </p>
+
+      <div class="input-group">
+        <input type="text"
+               name="full_name"
+               placeholder="Full Name"
+               required>
       </div>
 
-      <!-- Social Login -->
-      <div class="social-login">
+      <div class="input-group">
+        <input type="text"
+               name="username"
+               placeholder="Username"
+               required>
+      </div>
 
-        <button type="button" class="google">
-          Google
-        </button>
+      <div class="input-group">
+        <input type="email"
+               name="email"
+               placeholder="Email Address"
+               required>
+      </div>
 
-        <button type="button" class="facebook">
-          Facebook
-        </button>
+      <div class="input-group">
+        <input type="tel"
+               name="phone"
+               placeholder="Phone Number">
+      </div>
+
+      <!-- PASSWORD -->
+      <div class="input-group password-box">
+
+        <input type="password"
+               id="password"
+               name="password"
+               placeholder="Password"
+               required>
+
+        <span class="toggle-password"
+              onclick="togglePassword('password')">
+          👁
+        </span>
 
       </div>
 
-      <!-- Login -->
-      <p class="login-link">
+      <!-- RULES -->
+      <div class="password-rules">
+
+        <p id="rule-length">❌ Minimum 8 characters</p>
+
+        <p id="rule-uppercase">❌ At least 1 uppercase letter</p>
+
+        <p id="rule-number">❌ At least 1 number</p>
+
+        <p id="rule-special">❌ At least 1 special character</p>
+
+      </div>
+
+      <!-- STRENGTH -->
+      <div class="strength">
+        <div class="strength-bar"
+             id="strength-bar"></div>
+      </div>
+
+      <!-- CONFIRM -->
+      <div class="input-group password-box">
+
+        <input type="password"
+               id="confirm_password"
+               name="confirm_password"
+               placeholder="Confirm Password"
+               required>
+
+        <span class="toggle-password"
+              onclick="togglePassword('confirm_password')">
+          👁
+        </span>
+
+      </div>
+
+      <button type="submit" class="main-btn">
+        Register
+      </button>
+
+      <p class="switch-text">
         Already have an account?
-        <a href="/login">Login</a>
+        <a href="javascript:void(0);"
+           onclick="showLogin()">
+          Login
+        </a>
       </p>
 
     </form>
@@ -198,8 +215,8 @@
 
 </div>
 
-<!-- JS -->
 <script src="{{ url_for('static', filename='js/register.js') }}"></script>
 
 </body>
 </html>
+```
