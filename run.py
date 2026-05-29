@@ -87,22 +87,37 @@ def register():
             )
             return redirect("/")
 
-        # PASSWORD RULES
+        # PASSWORD VALIDATION
 
         if len(password) < 8:
-            flash("Minimum 8 characters required.", "danger")
+            flash(
+                "Minimum 8 characters required.",
+                "danger"
+            )
             return redirect("/")
 
         if not re.search(r"[A-Z]", password):
-            flash("One uppercase letter required.", "danger")
+            flash(
+                "One uppercase letter required.",
+                "danger"
+            )
             return redirect("/")
 
         if not re.search(r"[0-9]", password):
-            flash("One number required.", "danger")
+            flash(
+                "One number required.",
+                "danger"
+            )
             return redirect("/")
 
-        if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
-            flash("One special character required.", "danger")
+        if not re.search(
+            r"[!@#$%^&*(),.?\":{}|<>]",
+            password
+        ):
+            flash(
+                "One special character required.",
+                "danger"
+            )
             return redirect("/")
 
         # EMAIL EXISTS
@@ -115,7 +130,10 @@ def register():
         )
 
         if email_check.data:
-            flash("Email already exists.", "danger")
+            flash(
+                "Email already exists.",
+                "danger"
+            )
             return redirect("/")
 
         # USERNAME EXISTS
@@ -128,12 +146,19 @@ def register():
         )
 
         if username_check.data:
-            flash("Username already exists.", "danger")
+            flash(
+                "Username already exists.",
+                "danger"
+            )
             return redirect("/")
+
+        # INDIA TIMEZONE
 
         india_time = datetime.now(
             pytz.timezone("Asia/Kolkata")
         )
+
+        # USER DATA
 
         user_data = {
             "full_name": full_name,
@@ -145,9 +170,13 @@ def register():
             "time": india_time.isoformat()
         }
 
-        supabase.table("users").insert(
-            user_data
-        ).execute()
+        response = (
+            supabase.table("users")
+            .insert(user_data)
+            .execute()
+        )
+
+        print("REGISTER RESPONSE =", response)
 
         flash(
             "Registration Successful! Please Login.",
@@ -158,9 +187,14 @@ def register():
 
     except Exception as e:
 
-        flash(str(e), "danger")
-        return redirect("/")
+        print("REGISTER ERROR =", e)
 
+        flash(
+            str(e),
+            "danger"
+        )
+
+        return redirect("/")
 
 # ==================================
 # LOGIN
@@ -248,7 +282,6 @@ def login():
         )
 
         return redirect("/")
-
 
 # ==================================
 # DASHBOARD
