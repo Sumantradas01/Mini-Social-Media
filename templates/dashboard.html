@@ -1,26 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Nova Dashboard</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nova Chat</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/dashboard.css') }}"
+    >
+
 </head>
 
-<body style="background:#071120;color:white;font-family:Poppins;padding:40px;">
+<body>
 
-<h1>Welcome {{ username }}</h1>
+<div class="dashboard">
 
-<hr>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
 
-<p>Email : {{ email }}</p>
+        <div class="sidebar-top">
 
-<p>Phone : {{ phone }}</p>
+            <div class="profile">
 
-<p>DOB : {{ dob }}</p>
+                <div class="avatar" id="userAvatar">
+                    {{ username[0] }}
+                </div>
 
-<br>
+                <div>
+                    <h3>{{ username }}</h3>
+                    <p>{{ email }}</p>
+                </div>
 
-<a href="/logout" style="color:#00c6ff;">
-Logout
-</a>
+            </div>
+
+        </div>
+
+        <!-- SEARCH -->
+        <div class="search-box">
+
+            <input
+                type="text"
+                placeholder="Search chats..."
+            >
+
+        </div>
+
+        <!-- USERS -->
+        <div
+            class="chat-list"
+            id="chatList"
+        >
+
+        </div>
+
+        <!-- LOGOUT -->
+        <a href="/logout">
+
+            <button class="logout-btn">
+                Logout
+            </button>
+
+        </a>
+
+    </div>
+
+    <!-- CHAT AREA -->
+    <div class="chat-area">
+
+        <!-- HEADER -->
+        <div class="chat-header">
+
+            <h2 id="chatUser">
+                Select a chat
+            </h2>
+
+        </div>
+
+        <!-- MESSAGES -->
+        <div
+            class="messages"
+            id="messages"
+        >
+
+            <div class="message received">
+                Welcome to Nova Chat 🚀
+            </div>
+
+        </div>
+
+        <!-- INPUT -->
+        <div class="message-input">
+
+            <input
+                type="text"
+                id="messageInput"
+                placeholder="Type a message..."
+            >
+
+            <button onclick="sendMessage()">
+                Send
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    const CURRENT_USERNAME =
+        "{{ username }}";
+
+</script>
+
+<script
+    src="{{ url_for('static', filename='js/dashboard.js') }}"
+></script>
 
 </body>
 </html>

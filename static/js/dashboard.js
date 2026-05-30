@@ -1,185 +1,171 @@
-/* ======================================
-   NOVA DASHBOARD
-====================================== */
+/* =========================================
+   SELECTED USER
+========================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+let selectedUser = null;
 
-  // ======================================
-  // GET CURRENT USER
-  // ======================================
+/* =========================================
+   LOAD USERS
+========================================= */
 
-  const currentUser =
-    JSON.parse(
-      localStorage.getItem("currentNovaUser")
+async function loadUsers(){
+
+    const response =
+        await fetch("/get_users");
+
+    const users =
+        await response.json();
+
+    const chatList =
+        document.getElementById(
+            "chatList"
+        );
+
+    chatList.innerHTML = "";
+
+    users.forEach(user => {
+
+        const div =
+            document.createElement("div");
+
+        div.classList.add(
+            "chat-item"
+        );
+
+        div.innerHTML = `
+
+            <div class="chat-avatar">
+                ${user.username
+                    .charAt(0)
+                    .toUpperCase()}
+            </div>
+
+            <div class="chat-info">
+                <h4>${user.username}</h4>
+                <p>${user.email}</p>
+            </div>
+
+        `;
+
+        div.onclick = () => {
+
+            selectedUser = user;
+
+            document.getElementById(
+                "chatUser"
+            ).innerText =
+                user.username;
+
+            loadMessages(user.id);
+
+        };
+
+        chatList.appendChild(div);
+
+    });
+
+}
+
+/* =========================================
+   LOAD MESSAGES
+========================================= */
+
+async function loadMessages(userId){
+
+    const response =
+        await fetch(
+            `/get_messages/${userId}`
+        );
+
+    const messages =
+        await response.json();
+
+    const msgBox =
+        document.getElementById(
+            "messages"
+        );
+
+    msgBox.innerHTML = "";
+
+    messages.forEach(msg => {
+
+        const div =
+            document.createElement("div");
+
+        div.classList.add(
+            "message"
+        );
+
+        div.classList.add(
+
+            msg.sender_username ===
+            CURRENT_USERNAME
+
+            ? "sent"
+
+            : "received"
+
+        );
+
+        div.innerText =
+            msg.message;
+
+        msgBox.appendChild(div);
+
+    });
+
+}
+
+/* =========================================
+   SEND MESSAGE
+========================================= */
+
+async function sendMessage(){
+
+    if(!selectedUser)
+        return;
+
+    const input =
+        document.getElementById(
+            "messageInput"
+        );
+
+    const message =
+        input.value;
+
+    if(message.trim() === "")
+        return;
+
+    await fetch("/send_message",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+            receiver_id:
+                selectedUser.id,
+
+            message:
+                message
+
+        })
+
+    });
+
+    input.value = "";
+
+    loadMessages(
+        selectedUser.id
     );
 
-  // NO LOGIN
-  if (!currentUser) {
+}
 
-    window.location.href = "dashboard.html";
-    return;
+/* =========================================
+   AUTO LOAD
+========================================= */
 
-  }
-
-  // ======================================
-  // PROFILE ELEMENTS
-  // ======================================
-
-  const profileName =
-    document.getElementById("profileName");
-
-  const profileUsername =
-    document.getElementById("profileUsername");
-
-  const userAvatar =
-    document.getElementById("userAvatar");
-
-  const composeName =
-    document.getElementById("composeName");
-
-  const composeAvatar =
-    document.getElementById("composeAvatar");
-
-  // ======================================
-  // LOAD PROFILE
-  // ======================================
-
-  profileName.textContent =
-    currentUser.fullName;
-
-  profileUsername.textContent =
-    "@" + currentUser.username;
-
-  // INITIALS
-  const initials =
-    currentUser.fullName
-      .split(" ")
-      .map(word => word[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-
-  userAvatar.textContent = initials;
-
-  // COMPOSE
-  if (composeName) {
-
-    composeName.textContent =
-      currentUser.fullName.split(" ")[0];
-
-  }
-
-  if (composeAvatar) {
-
-    composeAvatar.textContent =
-      initials;
-
-  }
-
-  // ======================================
-  // NAV ACTIVE
-  // ======================================
-
-  document.querySelectorAll(".nav-item")
-    .forEach(item => {
-
-      item.addEventListener("click", () => {
-
-        document.querySelectorAll(".nav-item")
-          .forEach(i =>
-            i.classList.remove("active")
-          );
-
-        item.classList.add("active");
-
-      });
-
-    });
-
-  // ======================================
-  // LIKE BUTTONS
-  // ======================================
-
-  window.toggleLike = function(btn) {
-
-    btn.classList.toggle("liked");
-
-    const countEl =
-      btn.querySelector("span");
-
-    let count =
-      parseInt(countEl.textContent);
-
-    const svg =
-      btn.querySelector("svg");
-
-    if (btn.classList.contains("liked")) {
-
-      countEl.textContent = count + 1;
-
-      svg.setAttribute(
-        "fill",
-        "currentColor"
-      );
-
-      svg.setAttribute(
-        "stroke",
-        "none"
-      );
-
-    } else {
-
-      countEl.textContent = count - 1;
-
-      svg.setAttribute(
-        "fill",
-        "none"
-      );
-
-      svg.setAttribute(
-        "stroke",
-        "currentColor"
-      );
-
-    }
-
-  };
-
-  // ======================================
-  // FOLLOW BUTTONS
-  // ======================================
-
-  window.toggleFollow = function(btn) {
-
-    btn.classList.toggle("following");
-
-    btn.textContent =
-      btn.classList.contains("following")
-        ? "Following"
-        : "Follow";
-
-  };
-
-  // ======================================
-  // LOGOUT
-  // ======================================
-
-  const logoutBtn =
-    document.getElementById("logoutBtn");
-
-  if (logoutBtn) {
-
-    logoutBtn.addEventListener("click", () => {
-
-      localStorage.removeItem(
-        "currentNovaUser"
-      );
-
-      window.location.href =
-        "register.html";
-
-    });
-
-  }
-
-});
+loadUsers();
