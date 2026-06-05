@@ -268,3 +268,34 @@ body{
         width:100%;
     }
 }
+.search-user-section{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.search-user-section input{
+    flex:1;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+}
+
+.search-user-section button{
+    padding:12px 20px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.user-card,
+.request-card{
+
+    background:#13243a;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    margin-bottom:10px;
+}

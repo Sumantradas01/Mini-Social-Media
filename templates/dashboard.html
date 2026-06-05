@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nova Dashboard</title>
 
-      <link rel="stylesheet"
+    <link rel="stylesheet"
         href="{{ url_for('static', filename='css/dashboard.css') }}">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -49,14 +49,22 @@
 
         <!-- TOPBAR -->
 
-        <header class="topbar">
+        <div class="search-user-section">
 
-            <div class="search-box">
-                <input
-                    type="text"
-                    placeholder="Search for people, events, groups..."
-                >
-            </div>
+    <input
+        type="text"
+        id="userSearch"
+        placeholder="Search username..."
+    >
+
+    <button onclick="searchUser()">
+        Search
+    </button>
+
+</div>
+
+<div id="searchResults"></div>
+
 
             <div class="top-actions">
 
@@ -195,6 +203,14 @@
 
     <aside class="right-panel">
 
+      <div class="requests-panel">
+
+    <h3>Chat Requests</h3>
+
+    <div id="requestList"></div>
+
+</div>
+
         <div class="card">
 
             <div class="card-header">
@@ -278,5 +294,6 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
 </body>
 </html>

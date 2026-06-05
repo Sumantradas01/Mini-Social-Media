@@ -373,27 +373,6 @@ def dashboard():
 
     )
 
-# =========================================
-# GET USERS
-# =========================================
-
-@app.route("/get_users")
-def get_users():
-
-    current_user = session.get(
-        "user_id"
-    )
-
-    response = (
-        supabase.table("users")
-        .select("*")
-        .neq("id", current_user)
-        .execute()
-    )
-
-    return jsonify(
-        response.data
-    )
 
 # =========================================
 # GET MESSAGES
@@ -448,50 +427,265 @@ def get_messages(receiver_id):
 
     return jsonify(messages)
 
-# =========================================
-# SEND MESSAGE
-# =========================================
 
-@app.route(
-    "/send_message",
-    methods=["POST"]
-)
+## SEARCH USER
 
+@app.route("/search_user")
+def search_user():
+
+    query = request.args.get("query")
+
+    if not query:
+        return jsonify([])
+
+    response = (
+        supabase.table("users")
+        .select("id,username,email")
+        .ilike("username", f"%{query}%")
+        .execute()
+    )
+
+    return jsonify(response.data)
+
+
+## send_chat_request
+
+@app.route("/send_chat_request", methods=["POST"])
+def send_chat_request():
+
+    current_user = session.get("user_id")
+
+    data = request.get_json()
+
+    receiver_id = data.get("receiver_id")
+
+    # Check duplicate request
+
+    existing = (
+        supabase.table("chat_requests")
+        .select("*")
+        .eq("sender_id", current_user)
+        .eq("receiver_id", receiver_id)
+        .execute()
+    )
+
+    if existing.data:
+
+        return jsonify({
+            "success": False,
+            "message": "Request already sent"
+        })
+
+    supabase.table("chat_requests").insert({
+
+        "sender_id": current_user,
+        "receiver_id": receiver_id,
+        "status": "pending"
+
+    }).execute()
+
+    return jsonify({
+        "success": True
+    })
+
+
+##chat_requests
+
+@app.route("/chat_requests")
+def chat_requests():
+
+    current_user = session.get("user_id")
+
+    requests = (
+        supabase.table("chat_requests")
+        .select("*")
+        .eq("receiver_id", current_user)
+        .eq("status", "pending")
+        .execute()
+    )
+
+    result = []
+
+    for req in requests.data:
+
+        sender = (
+            supabase.table("users")
+            .select("username")
+            .eq("id", req["sender_id"])
+            .execute()
+        )
+
+        result.append({
+
+            "request_id": req["id"],
+            "sender_id": req["sender_id"],
+            "sender_username":
+            sender.data[0]["username"]
+
+        })
+
+    return jsonify(result)
+
+
+## accept_request
+
+
+@app.route("/accept_request", methods=["POST"])
+def accept_request():
+
+    data = request.get_json()
+
+    request_id = data.get("request_id")
+
+    supabase.table("chat_requests").update({
+
+        "status": "accepted"
+
+    }).eq(
+
+        "id",
+        request_id
+
+    ).execute()
+
+    return jsonify({
+        "success": True
+    })
+
+
+## reject_request
+
+
+@app.route("/reject_request", methods=["POST"])
+def reject_request():
+
+    data = request.get_json()
+
+    request_id = data.get("request_id")
+
+    supabase.table("chat_requests").update({
+
+        "status": "rejected"
+
+    }).eq(
+
+        "id",
+        request_id
+
+    ).execute()
+
+    return jsonify({
+        "success": True
+    })
+
+
+## get_users
+
+@app.route("/get_users")
+def get_users():
+
+    current_user = session.get("user_id")
+
+    accepted = (
+        supabase.table("chat_requests")
+        .select("*")
+        .eq("status", "accepted")
+        .execute()
+    )
+
+    users = []
+
+    for row in accepted.data:
+
+        other_user = None
+
+        if row["sender_id"] == current_user:
+
+            other_user = row["receiver_id"]
+
+        elif row["receiver_id"] == current_user:
+
+            other_user = row["sender_id"]
+
+        if other_user:
+
+            user = (
+                supabase.table("users")
+                .select("*")
+                .eq("id", other_user)
+                .execute()
+            )
+
+            if user.data:
+                users.append(user.data[0])
+
+    return jsonify(users)
+
+## send_message
+
+@app.route("/send_message", methods=["POST"])
 def send_message():
 
     data = request.get_json()
 
-    current_user = session.get(
-        "user_id"
+    current_user = session.get("user_id")
+
+    receiver_id = data["receiver_id"]
+
+    allowed = (
+        supabase.table("chat_requests")
+        .select("*")
+        .eq("status", "accepted")
+        .execute()
     )
+
+    can_chat = False
+
+    for req in allowed.data:
+
+        if (
+
+            req["sender_id"] == current_user
+            and
+            req["receiver_id"] == receiver_id
+
+        ) or (
+
+            req["sender_id"] == receiver_id
+            and
+            req["receiver_id"] == current_user
+
+        ):
+
+            can_chat = True
+            break
+
+    if not can_chat:
+
+        return jsonify({
+
+            "success": False,
+            "message": "Chat request not accepted"
+
+        })
 
     india_time = datetime.now(
         pytz.timezone("Asia/Kolkata")
     )
 
-    supabase.table(
-        "messages"
-    ).insert({
+    supabase.table("messages").insert({
 
-        "sender_id":
-            current_user,
-
-        "receiver_id":
-            data["receiver_id"],
-
-        "message":
-            data["message"],
-
-        "created_at":
-            india_time.isoformat()
+        "sender_id": current_user,
+        "receiver_id": receiver_id,
+        "message": data["message"],
+        "created_at": india_time.isoformat()
 
     }).execute()
 
     return jsonify({
-
         "success": True
-
     })
+
 
 # =========================================
 # LOGOUT
