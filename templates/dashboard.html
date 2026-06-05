@@ -1,23 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Dashboard</title>
 
-    <title>Nova Chat</title>
+    <link rel="stylesheet" href="dashboard.css">
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/dashboard.css') }}"
-    >
-
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -25,107 +15,268 @@
 <div class="dashboard">
 
     <!-- SIDEBAR -->
-    <div class="sidebar">
+    <aside class="sidebar">
 
-        <div class="sidebar-top">
+        <div class="logo">
+            <div class="logo-icon">N</div>
+            <h2>Nova</h2>
+        </div>
 
-            <div class="profile">
+        <nav>
 
-                <div class="avatar" id="userAvatar">
-                    {{ username[0] }}
+            <a class="active">🏠 Home</a>
+            <a>🔍 Explore</a>
+            <a>🎬 Reels</a>
+            <a>📅 Events</a>
+            <a>💬 Messages</a>
+            <a>👥 Communities</a>
+            <a>🤝 Friends</a>
+            <a>🔔 Notifications</a>
+            <a>👤 Profile</a>
+            <a>⚙️ Settings</a>
+
+        </nav>
+
+        <button class="create-post">
+            ✏️ Create Post
+        </button>
+
+    </aside>
+
+    <!-- CENTER -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="search-box">
+                <input
+                    type="text"
+                    placeholder="Search for people, events, groups..."
+                >
+            </div>
+
+            <div class="top-actions">
+
+                <button>💬</button>
+                <button>🔔</button>
+
+                <div class="profile-mini">
+
+                    <div class="avatar">
+                        N
+                    </div>
+
+                    <span>NM_01</span>
+
                 </div>
+
+            </div>
+
+        </header>
+
+        <!-- STORIES -->
+
+        <section class="stories">
+
+            <div class="story">
+                <div class="story-img">A</div>
+                <p>Ananya</p>
+            </div>
+
+            <div class="story">
+                <div class="story-img">K</div>
+                <p>Kabir</p>
+            </div>
+
+            <div class="story">
+                <div class="story-img">R</div>
+                <p>Riya</p>
+            </div>
+
+            <div class="story">
+                <div class="story-img">S</div>
+                <p>Suman</p>
+            </div>
+
+        </section>
+
+        <!-- POSTS -->
+
+        <section class="feed">
+
+            <div class="post">
+
+                <div class="post-header">
+
+                    <div class="user">
+
+                        <div class="avatar">K</div>
+
+                        <div>
+
+                            <h3>kabir_singh</h3>
+                            <span>3h ago</span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="post-content">
+
+                    Just finished a great jam session 🎸
+                    Looking for more music lovers in Bangalore!
+
+                </div>
+
+                <div class="post-image">
+                    🎸
+                </div>
+
+                <div class="post-actions">
+
+                    <span>❤️ 342</span>
+                    <span>💬 56</span>
+                    <span>🔁 12</span>
+
+                </div>
+
+            </div>
+
+            <div class="post">
+
+                <div class="post-header">
+
+                    <div class="user">
+
+                        <div class="avatar">A</div>
+
+                        <div>
+
+                            <h3>ananya_iyer</h3>
+                            <span>5h ago</span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="post-content">
+
+                    Exploring new cafes today ☕
+                    Any recommendations?
+
+                </div>
+
+                <div class="post-image">
+                    ☕
+                </div>
+
+                <div class="post-actions">
+
+                    <span>❤️ 1200</span>
+                    <span>💬 128</span>
+                    <span>🔁 45</span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- RIGHT PANEL -->
+
+    <aside class="right-panel">
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h3>Upcoming Events</h3>
+                <a href="#">View All</a>
+
+            </div>
+
+            <div class="event">
+
+                <div>🎵</div>
 
                 <div>
-                    <h3>{{ username }}</h3>
-                    <p>{{ email }}</p>
+
+                    <h4>Guitar Jamming</h4>
+                    <p>Koramangala, Bangalore</p>
+
+                </div>
+
+                <button>Join</button>
+
+            </div>
+
+            <div class="event">
+
+                <div>📖</div>
+
+                <div>
+
+                    <h4>Poetry Night</h4>
+                    <p>Indiranagar</p>
+
+                </div>
+
+                <button>Join</button>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h3>Chats</h3>
+                <a href="#">View All</a>
+
+            </div>
+
+            <div class="chat">
+
+                <div class="avatar">M</div>
+
+                <div>
+
+                    <h4>MB_207</h4>
+                    <p>Tap to chat...</p>
+
+                </div>
+
+            </div>
+
+            <div class="chat">
+
+                <div class="avatar">K</div>
+
+                <div>
+
+                    <h4>kd@23456</h4>
+                    <p>Tap to chat...</p>
+
                 </div>
 
             </div>
 
         </div>
 
-        <!-- SEARCH -->
-        <div class="search-box">
-
-            <input
-                type="text"
-                placeholder="Search chats..."
-            >
-
-        </div>
-
-        <!-- USERS -->
-        <div
-            class="chat-list"
-            id="chatList"
-        >
-
-        </div>
-
-        <!-- LOGOUT -->
-        <a href="/logout">
-
-            <button class="logout-btn">
-                Logout
-            </button>
-
-        </a>
-
-    </div>
-
-    <!-- CHAT AREA -->
-    <div class="chat-area">
-
-        <!-- HEADER -->
-        <div class="chat-header">
-
-            <h2 id="chatUser">
-                Select a chat
-            </h2>
-
-        </div>
-
-        <!-- MESSAGES -->
-        <div
-            class="messages"
-            id="messages"
-        >
-
-            <div class="message received">
-                Welcome to Nova Chat 🚀
-            </div>
-
-        </div>
-
-        <!-- INPUT -->
-        <div class="message-input">
-
-            <input
-                type="text"
-                id="messageInput"
-                placeholder="Type a message..."
-            >
-
-            <button onclick="sendMessage()">
-                Send
-            </button>
-
-        </div>
-
-    </div>
+    </aside>
 
 </div>
 
-<script>
-
-    const CURRENT_USERNAME =
-        "{{ username }}";
-
-</script>
-
-<script
-    src="{{ url_for('static', filename='js/dashboard.js') }}"
-></script>
+<script src="dashboard.js"></script>
 
 </body>
 </html>
