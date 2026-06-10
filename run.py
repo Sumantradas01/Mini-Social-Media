@@ -686,6 +686,136 @@ def send_message():
         "success": True
     })
 
+## search_people
+
+
+@app.route("/search_people")
+def search_people():
+
+    current_user = session.get("user_id")
+
+    query = request.args.get("query")
+
+    response = (
+        supabase.table("users")
+        .select("*")
+        .neq("id", current_user)
+        .ilike("username", f"%{query}%")
+        .execute()
+    )
+
+    print("SEARCH QUERY =", query)
+    print("RESULT =", response.data)
+
+    return jsonify(response.data)
+
+
+##  send_connection
+
+
+@app.route("/send_connection", methods=["POST"])
+def send_connection():
+
+    current_user = session.get("user_id")
+
+    data = request.get_json()
+
+    receiver_id = data["receiver_id"]
+
+    existing = (
+        supabase.table("connections")
+        .select("*")
+        .or_(
+            f"and(sender_id.eq.{current_user},receiver_id.eq.{receiver_id}),and(sender_id.eq.{receiver_id},receiver_id.eq.{current_user})"
+        )
+        .execute()
+    )
+
+    if existing.data:
+
+        return jsonify({
+            "success": False,
+            "message": "Request already exists"
+        })
+
+    response = (
+        supabase.table("connections")
+        .insert({
+            "sender_id": current_user,
+            "receiver_id": receiver_id,
+            "accepted": False,
+            "status": "pending"
+        })
+        .execute()
+    )
+
+    print("CONNECTION INSERT =", response.data)
+
+    return jsonify({
+        "success": True
+    })
+## connection_requests
+
+
+@app.route("/connection_requests")
+@app.route("/connection_requests")
+def connection_requests():
+
+    current_user = session.get("user_id")
+
+    requests = (
+        supabase.table("connections")
+        .select("*")
+        .eq("receiver_id", current_user)
+        .eq("status", "pending")
+        .execute()
+    )
+
+    result = []
+
+    for req in requests.data:
+
+        sender = (
+            supabase.table("users")
+            .select("username")
+            .eq("id", req["sender_id"])
+            .execute()
+        )
+
+        result.append({
+
+            "request_id": req["id"],
+            "sender_id": req["sender_id"],
+            "username": sender.data[0]["username"]
+
+        })
+
+    return jsonify(result)
+
+
+##  accept_connection
+
+
+@app.route("/accept_connection", methods=["POST"])
+def accept_connection():
+
+    data = request.get_json()
+
+    request_id = data["request_id"]
+
+    supabase.table("connections").update({
+
+        "accepted": True,
+        "status": "accepted"
+
+    }).eq(
+        "id",
+        request_id
+    ).execute()
+
+    return jsonify({
+        "success": True
+    })
 
 # =========================================
 # LOGOUT
