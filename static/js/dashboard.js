@@ -196,3 +196,146 @@ document.addEventListener(
 
     }
 );
+async function searchPeople(){
+
+    const query =
+    document.getElementById(
+        "networkSearch"
+    ).value;
+
+    const response =
+    await fetch(
+        `/search_people?query=${query}`
+    );
+
+    const users =
+    await response.json();
+
+    const results =
+    document.getElementById(
+        "networkResults"
+    );
+
+    results.innerHTML = "";
+
+    users.forEach(user => {
+
+        results.innerHTML += `
+
+        <div class="user-card">
+
+            <h4>${user.username}</h4>
+
+            <button
+            onclick="sendConnection(
+            ${user.id})">
+
+                Connect
+
+            </button>
+
+        </div>
+
+        `;
+
+    });
+
+}
+async function sendConnection(id){
+
+    const response =
+    await fetch(
+        "/send_connection",
+        {
+            method:"POST",
+
+            headers:{
+                "Content-Type":
+                "application/json"
+            },
+
+            body:JSON.stringify({
+
+                receiver_id:id
+
+            })
+
+        }
+    );
+
+    const data =
+    await response.json();
+
+    alert(
+        data.message ||
+        "Connection Request Sent"
+    );
+
+}
+async function loadConnectionRequests(){
+
+    const response =
+    await fetch(
+        "/connection_requests"
+    );
+
+    const requests =
+    await response.json();
+
+    const container =
+    document.getElementById(
+        "connectionRequests"
+    );
+
+    if(!container) return;
+
+    container.innerHTML = "";
+
+    requests.forEach(req => {
+
+        container.innerHTML += `
+
+        <div class="request-card">
+
+            <p>${req.username}</p>
+
+            <button
+            onclick="acceptConnection(
+            ${req.request_id})">
+
+                Accept
+
+            </button>
+
+        </div>
+
+        `;
+
+    });
+
+}
+async function acceptConnection(id){
+
+    await fetch(
+        "/accept_connection",
+        {
+            method:"POST",
+
+            headers:{
+                "Content-Type":
+                "application/json"
+            },
+
+            body:JSON.stringify({
+
+                request_id:id
+
+            })
+
+        }
+    );
+
+    loadConnectionRequests();
+
+}
+loadConnectionRequests();

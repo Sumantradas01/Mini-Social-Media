@@ -41,29 +41,38 @@
         <button class="create-post">
             ✏️ Create Post
         </button>
+        <a href="/logout" class="logout-btn">
+    🚪 Logout
+</a>
 
     </aside>
 
     <!-- CENTER -->
     <main class="main-content">
 
-        <!-- TOPBAR -->
 
-        <div class="search-user-section">
+        <!-- NETWORK SEARCH -->
+
+<div class="search-user-section">
 
     <input
         type="text"
-        id="userSearch"
-        placeholder="Search username..."
-    >
+        id="networkSearch"
+        placeholder="Search username...">
 
-    <button onclick="searchUser()">
+    <button onclick="searchPeople()">
         Search
     </button>
 
 </div>
 
-<div id="searchResults"></div>
+<div id="networkResults"></div>
+
+
+
+        <!-- TOPBAR -->
+
+
 
 
             <div class="top-actions">
@@ -73,13 +82,13 @@
 
                 <div class="profile-mini">
 
-                    <div class="avatar">
-                        N
-                    </div>
+    <div class="avatar">
+        {{ username[0]|upper }}
+    </div>
 
-                    <span>NM_01</span>
+    <span>{{ username }}</span>
 
-                </div>
+</div>
 
             </div>
 
@@ -213,6 +222,14 @@
 
         <div class="card">
 
+            <div class="card">
+
+        <h3>Connection Requests</h3>
+
+                <div id="connectionRequests"></div>
+
+        </div>
+
             <div class="card-header">
 
                 <h3>Upcoming Events</h3>
@@ -288,7 +305,6 @@
             </div>
 
         </div>
-
     </aside>
 
 </div>
