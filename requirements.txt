@@ -10,3 +10,4 @@ python-dotenv>=1.0.1
 authlib>=1.3.0        # for Google/Facebook OAuth (production)
 requests>=2.31.0
 gunicorn>=22.0.0      # for Render / PythonAnywhere deployment
+pytz
