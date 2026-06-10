@@ -817,6 +817,32 @@ def accept_connection():
         "success": True
     })
 
+
+##  profile
+
+@app.route("/profile/<int:user_id>")
+def profile(user_id):
+
+    if "user_id" not in session:
+        return redirect("/")
+
+    user = (
+        supabase.table("users")
+        .select("*")
+        .eq("id", user_id)
+        .execute()
+    )
+
+    if not user.data:
+        return "User Not Found"
+
+    user = user.data[0]
+
+    return render_template(
+        "profile.html",
+        user=user
+    )
+
 # =========================================
 # LOGOUT
 # =========================================

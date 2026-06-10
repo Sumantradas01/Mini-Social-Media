@@ -220,15 +220,39 @@ async function searchPeople(){
 
     users.forEach(user => {
 
-        results.innerHTML += `
+    results.innerHTML += `
 
-        <div class="user-card">
+    <div class="search-user-card">
 
-            <h4>${user.username}</h4>
+        <div class="search-user-left">
+
+            <div class="search-user-avatar">
+                ${user.username[0].toUpperCase()}
+            </div>
+
+            <div class="search-user-info">
+
+                <h4>${user.username}</h4>
+
+                <p>${user.email}</p>
+
+            </div>
+
+        </div>
+
+        <div style="display:flex;gap:10px;">
+
+            <a
+                href="/profile/${user.id}"
+                class="profile-btn">
+
+                Profile
+
+            </a>
 
             <button
-            onclick="sendConnection(
-            ${user.id})">
+                class="connect-btn"
+                onclick="sendConnection(${user.id})">
 
                 Connect
 
@@ -236,9 +260,11 @@ async function searchPeople(){
 
         </div>
 
-        `;
+    </div>
 
-    });
+    `;
+
+});
 
 }
 async function sendConnection(id){
