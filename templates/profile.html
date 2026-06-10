@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>{{ user.username }}</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/profile.css') }}">
+
+</head>
+
+<body>
+
+<div class="profile-container">
+
+    <div class="profile-header">
+
+        <div class="profile-avatar">
+
+            {{ user.username[0]|upper }}
+
+        </div>
+
+        <div class="profile-info">
+
+            <h1>{{ user.full_name }}</h1>
+
+            <h3>@{{ user.username }}</h3>
+
+            <p>{{ user.email }}</p>
+
+            <div class="profile-stats">
+
+                <div>
+                    <strong>0</strong>
+                    <span>Posts</span>
+                </div>
+
+                <div>
+                    <strong>0</strong>
+                    <span>Friends</span>
+                </div>
+
+            </div>
+
+            <div class="profile-actions">
+
+                <button
+                    onclick="sendConnection({{ user.id }})">
+
+                    Add Friend
+
+                </button>
+
+                <button
+                    onclick="sendChatRequest({{ user.id }})">
+
+                    Message
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="posts-grid">
+
+        <div class="post-box">📸</div>
+        <div class="post-box">🎵</div>
+        <div class="post-box">☕</div>
+        <div class="post-box">🌴</div>
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+
+</body>
+</html>
