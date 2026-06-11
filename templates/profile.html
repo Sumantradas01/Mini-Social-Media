@@ -17,9 +17,31 @@
 
         <div class="profile-avatar">
 
-            {{ user.username[0]|upper }}
+            {% if user.profile_picture %}
+                <img
+                    src="{{ user.profile_picture }}"
+                    id="profileImage"
+                    alt="Profile Picture">
+            {% else %}
+                {{ user.username[0]|upper }}
+            {% endif %}
 
         </div>
+
+        {% if user.id == session['user_id'] %}
+        <div class="profile-upload">
+
+            <input
+                type="file"
+                id="profilePicInput"
+                accept="image/*">
+
+            <button onclick="uploadProfilePicture()">
+                Update Profile Picture
+            </button>
+
+        </div>
+        {% endif %}
 
         <div class="profile-info">
 
@@ -29,48 +51,131 @@
 
             <p>{{ user.email }}</p>
 
+            {% if user.bio %}
+                <p class="profile-bio">
+                    {{ user.bio }}
+                </p>
+            {% else %}
+                <p class="profile-bio">
+                    No bio added yet.
+                </p>
+            {% endif %}
+
+            {% if user.id == session['user_id'] %}
+            <div class="bio-editor">
+
+                <textarea
+                    id="bioText"
+                    placeholder="Write something about yourself...">{{ user.bio or '' }}</textarea>
+
+                <button onclick="updateBio()">
+                    Save Bio
+                </button>
+
+            </div>
+            {% endif %}
+
             <div class="profile-stats">
 
                 <div>
-                    <strong>0</strong>
+                    <strong>{{ posts|length }}</strong>
                     <span>Posts</span>
                 </div>
 
                 <div>
-                    <strong>0</strong>
+                    <strong>{{ friend_count or 0 }}</strong>
                     <span>Friends</span>
                 </div>
 
             </div>
 
+            {% if user.id != session['user_id'] %}
             <div class="profile-actions">
 
-                <button
-                    onclick="sendConnection({{ user.id }})">
-
+                <button onclick="sendConnection({{ user.id }})">
                     Add Friend
-
                 </button>
 
-                <button
-                    onclick="sendChatRequest({{ user.id }})">
-
+                <button onclick="sendChatRequest({{ user.id }})">
                     Message
-
                 </button>
 
             </div>
+            {% endif %}
 
         </div>
 
     </div>
 
-    <div class="posts-grid">
+</div>
 
-        <div class="post-box">📸</div>
-        <div class="post-box">🎵</div>
-        <div class="post-box">☕</div>
-        <div class="post-box">🌴</div>
+<hr>
+
+<div class="profile-posts">
+
+    <h3>
+        {% if user.id == session['user_id'] %}
+            My Posts
+        {% else %}
+            Posts
+        {% endif %}
+    </h3>
+
+    <div id="userPosts">
+
+        {% if posts %}
+
+            {% for post in posts %}
+
+            <div class="post-card">
+
+                {% if post.image_url %}
+                <img
+                    src="{{ post.image_url }}"
+                    class="post-image"
+                    alt="Post Image">
+                {% endif %}
+
+                <p>{{ post.content }}</p>
+
+                <small>
+                    {{ post.created_at }}
+                </small>
+
+                {% if user.id == session['user_id'] %}
+                <div class="post-actions">
+
+                    <a href="/edit-post/{{ post.id }}"
+                       class="edit-btn">
+                        Edit
+                    </a>
+
+                    <a href="/delete-post/{{ post.id }}"
+                       class="delete-btn"
+                       onclick="return confirm('Delete this post?')">
+                        Delete
+                    </a>
+
+                </div>
+                {% endif %}
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty-posts">
+
+                <h4>No posts yet</h4>
+
+                <p>
+                    Share your first post with the community.
+                </p>
+
+            </div>
+
+        {% endif %}
 
     </div>
 

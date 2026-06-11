@@ -823,9 +823,6 @@ def accept_connection():
 @app.route("/profile/<int:user_id>")
 def profile(user_id):
 
-    if "user_id" not in session:
-        return redirect("/")
-
     user = (
         supabase.table("users")
         .select("*")
@@ -834,13 +831,59 @@ def profile(user_id):
     )
 
     if not user.data:
-        return "User Not Found"
+        return redirect("/dashboard")
 
-    user = user.data[0]
+    posts = (
+        supabase.table("posts")
+        .select("*")
+        .eq("user_id", user_id)
+        .order("created_at", desc=True)
+        .execute()
+    )
 
     return render_template(
         "profile.html",
-        user=user
+        user=user.data[0],
+        posts=posts.data
+    )
+@app.route("/delete-post/<int:post_id>")
+def delete_post(post_id):
+
+    if "user_id" not in session:
+        return redirect("/")
+
+    supabase.table("posts")\
+        .delete()\
+        .eq("id", post_id)\
+        .execute()
+
+    return redirect(f"/profile/{session['user_id']}")
+
+
+@app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
+def edit_post(post_id):
+
+    if request.method == "POST":
+
+        content = request.form["content"]
+
+        supabase.table("posts")\
+            .update({
+                "content": content
+            })\
+            .eq("id", post_id)\
+            .execute()
+
+        return redirect(f"/profile/{session['user_id']}")
+
+    post = supabase.table("posts")\
+        .select("*")\
+        .eq("id", post_id)\
+        .execute()
+
+    return render_template(
+        "edit_post.html",
+        post=post.data[0]
     )
 
 @app.route("/create_post", methods=["POST"])
@@ -1001,6 +1044,103 @@ def get_posts():
         print("LOAD POSTS ERROR =", e)
 
         return jsonify([])
+
+
+@app.route(
+    "/upload_profile_picture",
+    methods=["POST"]
+)
+def upload_profile_picture():
+
+    try:
+
+        if "user_id" not in session:
+
+            return jsonify({
+                "success": False,
+                "message": "Login required"
+            })
+
+        file = request.files.get(
+            "profile_picture"
+        )
+
+        if not file:
+
+            return jsonify({
+                "success": False,
+                "message": "No file selected"
+            })
+
+        image_bytes = file.read()
+
+        supabase.table("users")\
+            .update({
+                "profile_picture": image_bytes.hex()
+            })\
+            .eq(
+                "id",
+                session["user_id"]
+            )\
+            .execute()
+
+        return jsonify({
+            "success": True
+        })
+
+    except Exception as e:
+
+        print("PROFILE PIC ERROR =", e)
+
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        })
+
+@app.route(
+    "/update_bio",
+    methods=["POST"]
+)
+def update_bio():
+
+    try:
+
+        if "user_id" not in session:
+
+            return jsonify({
+                "success": False,
+                "message": "Login required"
+            })
+
+        data = request.get_json()
+
+        bio = data.get(
+            "bio",
+            ""
+        )
+
+        supabase.table("users")\
+            .update({
+                "bio": bio
+            })\
+            .eq(
+                "id",
+                session["user_id"]
+            )\
+            .execute()
+
+        return jsonify({
+            "success": True
+        })
+
+    except Exception as e:
+
+        print("BIO UPDATE ERROR =", e)
+
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        })
 # =========================================
 # LOGOUT
 # =========================================
