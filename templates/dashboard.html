@@ -38,9 +38,9 @@
 
         </nav>
 
-        <button class="create-post">
-            ✏️ Create Post
-        </button>
+       <button class="create-post" onclick="openPostModal()">
+                      ✏️ Create Post
+      </button>
         <a href="/logout" class="logout-btn">
     🚪 Logout
 </a>
@@ -79,14 +79,7 @@
 
 
 
-                <div class="profile-mini">
-
-
-
-
-
-</div>
-
+                <div class="profile-mini"></div>
             </div>
 
         </header>
@@ -119,89 +112,7 @@
 
         <!-- POSTS -->
 
-        <section class="feed">
-
-            <div class="post">
-
-                <div class="post-header">
-
-                    <div class="user">
-
-                        <div class="avatar">K</div>
-
-                        <div>
-
-                            <h3>kabir_singh</h3>
-                            <span>3h ago</span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="post-content">
-
-                    Just finished a great jam session 🎸
-                    Looking for more music lovers in Bangalore!
-
-                </div>
-
-                <div class="post-image">
-                    🎸
-                </div>
-
-                <div class="post-actions">
-
-                    <span>❤️ 342</span>
-                    <span>💬 56</span>
-                    <span>🔁 12</span>
-
-                </div>
-
-            </div>
-
-            <div class="post">
-
-                <div class="post-header">
-
-                    <div class="user">
-
-                        <div class="avatar">A</div>
-
-                        <div>
-
-                            <h3>ananya_iyer</h3>
-                            <span>5h ago</span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="post-content">
-
-                    Exploring new cafes today ☕
-                    Any recommendations?
-
-                </div>
-
-                <div class="post-image">
-                    ☕
-                </div>
-
-                <div class="post-actions">
-
-                    <span>❤️ 1200</span>
-                    <span>💬 128</span>
-                    <span>🔁 45</span>
-
-                </div>
-
-            </div>
-
-        </section>
+        <section class="feed" id="feedContainer"></section>
 
     </main>
 
@@ -303,6 +214,46 @@
 
         </div>
     </aside>
+
+</div>
+<!-- CREATE POST MODAL -->
+
+<div id="postModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>Create Post</h2>
+
+            <span class="close-modal"
+                  onclick="closePostModal()">
+                ✕
+            </span>
+
+        </div>
+
+        <textarea
+            id="postCaption"
+            placeholder="What's on your mind?">
+        </textarea>
+
+        <input
+            type="file"
+            id="postMedia"
+            accept="image/*,video/*">
+
+        <div id="mediaPreview"></div>
+
+        <button
+            class="publish-btn"
+            onclick="createPost()">
+
+            Publish Post
+
+        </button>
+
+    </div>
 
 </div>
 

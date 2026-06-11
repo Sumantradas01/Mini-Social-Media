@@ -11,7 +11,7 @@ from flask import (
 from supabase import create_client
 from dotenv import load_dotenv
 from datetime import datetime, date
-
+import base64
 import pytz
 import os
 import re
@@ -843,6 +843,164 @@ def profile(user_id):
         user=user
     )
 
+@app.route("/create_post", methods=["POST"])
+def create_post():
+
+    if "user_id" not in session:
+
+        return jsonify({
+            "success": False
+        })
+
+    try:
+
+        caption = request.form.get(
+            "caption"
+        )
+
+        user_id = session["user_id"]
+
+        india_time = datetime.now(
+            pytz.timezone("Asia/Kolkata")
+        )
+
+        post = (
+            supabase.table("posts")
+            .insert({
+                "user_id": user_id,
+                "caption": caption,
+                "created_at": india_time.isoformat()
+            })
+            .execute()
+        )
+
+        post_id = post.data[0]["id"]
+
+        file = request.files.get("media")
+
+        if file:
+
+            media_bytes = file.read()
+
+            media_data = media_bytes
+
+            supabase.table(
+                "post_media"
+            ).insert({
+
+                "post_id": post_id,
+
+                "media_data": media_data,
+
+                "media_name": file.filename,
+
+                "media_type": file.content_type,
+
+                "file_size": len(media_bytes)
+
+            }).execute()
+
+        return jsonify({
+            "success": True
+        })
+
+    except Exception as e:
+
+        print("POST ERROR =", e)
+
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        })
+
+
+@app.route("/posts")
+def get_posts():
+
+    try:
+
+        posts = (
+            supabase.table("posts")
+            .select("*")
+            .order(
+                "created_at",
+                desc=True
+            )
+            .execute()
+        )
+
+        result = []
+
+        for post in posts.data:
+
+            user = (
+                supabase.table("users")
+                .select("username")
+                .eq(
+                    "id",
+                    post["user_id"]
+                )
+                .execute()
+            )
+
+            media = (
+                supabase.table("post_media")
+                .select("*")
+                .eq(
+                    "post_id",
+                    post["id"]
+                )
+                .execute()
+            )
+
+            media_url = None
+            media_type = None
+
+            if media.data:
+
+                media_url = (
+                    "data:"
+                    + media.data[0]["media_type"]
+                    + ";base64,"
+                    + base64.b64encode(
+                        bytes.fromhex(
+                            media.data[0]["media_data"]
+                        )
+                    ).decode()
+                )
+
+                media_type = (
+                    media.data[0]["media_type"]
+                )
+
+            result.append({
+
+                "id": post["id"],
+
+                "username":
+                user.data[0]["username"],
+
+                "caption":
+                post["caption"],
+
+                "created_at":
+                post["created_at"],
+
+                "media_url":
+                media_url,
+
+                "media_type":
+                media_type
+
+            })
+
+        return jsonify(result)
+
+    except Exception as e:
+
+        print("LOAD POSTS ERROR =", e)
+
+        return jsonify([])
 # =========================================
 # LOGOUT
 # =========================================
@@ -858,6 +1016,9 @@ def logout():
     )
 
     return redirect("/")
+
+
+
 
 # =========================================
 # MAIN

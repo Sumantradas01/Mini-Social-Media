@@ -789,3 +789,129 @@ header,
 
     background:#6c84ff;
 }
+
+/* ==========================
+   CREATE POST MODAL
+========================== */
+
+.modal{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.7);
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:9999;
+}
+
+.modal.show{
+
+    display:flex;
+}
+
+.modal-content{
+
+    width:600px;
+
+    max-width:95%;
+
+    background:#111827;
+
+    border-radius:18px;
+
+    padding:25px;
+}
+
+.modal-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+}
+
+.close-modal{
+
+    cursor:pointer;
+
+    font-size:22px;
+}
+
+.modal textarea{
+
+    width:100%;
+
+    min-height:120px;
+
+    background:#1a2236;
+
+    border:none;
+
+    border-radius:12px;
+
+    color:white;
+
+    padding:15px;
+
+    resize:none;
+}
+
+.modal input[type=file]{
+
+    margin-top:15px;
+
+    width:100%;
+}
+
+.publish-btn{
+
+    margin-top:20px;
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#4f6ef7;
+
+    color:white;
+
+    font-weight:700;
+}
+
+.preview-image,
+.preview-video{
+
+    width:100%;
+
+    margin-top:15px;
+
+    border-radius:12px;
+
+    max-height:400px;
+
+    object-fit:cover;
+}
+
+.feed-image,
+.feed-video{
+
+    width:100%;
+
+    border-radius:12px;
+
+    margin-top:10px;
+}

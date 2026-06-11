@@ -365,3 +365,214 @@ async function acceptConnection(id){
 
 }
 loadConnectionRequests();
+
+/* ===========================
+   POST MODAL
+=========================== */
+
+function openPostModal(){
+
+    document
+    .getElementById("postModal")
+    .classList.add("show");
+}
+
+function closePostModal(){
+
+    document
+    .getElementById("postModal")
+    .classList.remove("show");
+}
+document.addEventListener("change",(e)=>{
+
+    if(e.target.id !== "postMedia") return;
+
+    const file = e.target.files[0];
+
+    const preview =
+    document.getElementById(
+        "mediaPreview"
+    );
+
+    preview.innerHTML = "";
+
+    if(!file) return;
+
+    const url =
+    URL.createObjectURL(file);
+
+    if(file.type.startsWith("image")){
+
+        preview.innerHTML = `
+            <img
+                src="${url}"
+                class="preview-image">
+        `;
+    }
+    else{
+
+        preview.innerHTML = `
+            <video
+                src="${url}"
+                controls
+                class="preview-video">
+            </video>
+        `;
+    }
+
+});
+async function createPost(){
+
+    const caption =
+    document.getElementById(
+        "postCaption"
+    ).value;
+
+    const file =
+    document.getElementById(
+        "postMedia"
+    ).files[0];
+
+    const formData =
+    new FormData();
+
+    formData.append(
+        "caption",
+        caption
+    );
+
+    if(file){
+        formData.append(
+            "media",
+            file
+        );
+    }
+
+    const response =
+    await fetch(
+        "/create_post",
+        {
+            method:"POST",
+            body:formData
+        }
+    );
+
+    const data =
+    await response.json();
+
+    if(data.success){
+
+        closePostModal();
+
+        document
+        .getElementById(
+            "postCaption"
+        ).value="";
+
+        document
+        .getElementById(
+            "postMedia"
+        ).value="";
+
+        loadPosts();
+    }
+}
+
+async function loadPosts(){
+
+    const response =
+    await fetch("/posts");
+
+    const posts =
+    await response.json();
+
+    const feed =
+    document.getElementById(
+        "feedContainer"
+    );
+
+    feed.innerHTML = "";
+
+    posts.forEach(post => {
+
+        let mediaHTML = "";
+
+        if(post.media_url){
+
+            if(
+                post.media_type
+                .startsWith("image")
+            ){
+
+                mediaHTML = `
+                    <img
+                    src="${post.media_url}"
+                    class="feed-image">
+                `;
+            }
+            else{
+
+                mediaHTML = `
+                    <video
+                    src="${post.media_url}"
+                    controls
+                    class="feed-video">
+                    </video>
+                `;
+            }
+        }
+
+        feed.innerHTML += `
+
+        <div class="post">
+
+            <div class="post-header">
+
+                <div class="user">
+
+                    <div class="avatar">
+                        ${post.username[0].toUpperCase()}
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            ${post.username}
+                        </h3>
+
+                        <span>
+                            ${post.created_at}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="post-content">
+                ${post.caption || ""}
+            </div>
+
+            ${mediaHTML}
+
+            <div class="post-actions">
+
+                <span>❤️ Like</span>
+
+                <span>💬 Comment</span>
+
+                <span>🔁 Share</span>
+
+            </div>
+
+        </div>
+
+        `;
+    });
+}
+
+document.addEventListener(
+    "DOMContentLoaded",
+    loadPosts
+);
