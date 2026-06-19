@@ -478,18 +478,18 @@ async function createPost(){
     }
 }
 
-async function loadPosts(){
+async function loadPosts() {
 
     const response =
-    await fetch("/posts");
+        await fetch("/posts");
 
     const posts =
-    await response.json();
+        await response.json();
 
     const feed =
-    document.getElementById(
-        "feedContainer"
-    );
+        document.getElementById(
+            "postsContainer"
+        );
 
     feed.innerHTML = "";
 
@@ -497,26 +497,38 @@ async function loadPosts(){
 
         let mediaHTML = "";
 
-        if(post.media_url){
+        if (
+            post.media_url &&
+            post.media_type
+        ) {
 
-            if(
-                post.media_type
-                .startsWith("image")
-            ){
+            if (
+                post.media_type.startsWith(
+                    "image/"
+                )
+            ) {
 
                 mediaHTML = `
                     <img
-                    src="${post.media_url}"
-                    class="feed-image">
+                        src="${post.media_url}"
+                        class="post-image">
                 `;
-            }
-            else{
+
+            } else if (
+                post.media_type.startsWith(
+                    "video/"
+                )
+            ) {
 
                 mediaHTML = `
                     <video
-                    src="${post.media_url}"
-                    controls
-                    class="feed-video">
+                        controls
+                        class="post-video">
+
+                        <source
+                            src="${post.media_url}"
+                            type="${post.media_type}">
+
                     </video>
                 `;
             }
@@ -524,53 +536,44 @@ async function loadPosts(){
 
         feed.innerHTML += `
 
-        <div class="post">
+            <div class="post-card">
 
-            <div class="post-header">
+                <div class="post-header">
 
-                <div class="user">
+                    <strong>
+                        ${post.username}
+                    </strong>
 
-                    <div class="avatar">
-                        ${post.username[0].toUpperCase()}
-                    </div>
+                </div>
 
-                    <div>
+                <div class="post-body">
 
-                        <h3>
-                            ${post.username}
-                        </h3>
+                    ${mediaHTML}
 
-                        <span>
-                            ${post.created_at}
-                        </span>
+                    <p>
+                        ${post.caption || ""}
+                    </p>
 
-                    </div>
+                </div>
+
+                <div class="post-footer">
+
+                    ${new Date(
+                        post.created_at
+                    ).toLocaleString()}
 
                 </div>
 
             </div>
 
-            <div class="post-content">
-                ${post.caption || ""}
-            </div>
-
-            ${mediaHTML}
-
-            <div class="post-actions">
-
-                <span>❤️ Like</span>
-
-                <span>💬 Comment</span>
-
-                <span>🔁 Share</span>
-
-            </div>
-
-        </div>
-
         `;
     });
 }
+
+document.addEventListener(
+    "DOMContentLoaded",
+    loadPosts
+);
 
 document.addEventListener(
     "DOMContentLoaded",

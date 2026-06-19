@@ -11,6 +11,7 @@ from flask import (
 from supabase import create_client
 from dotenv import load_dotenv
 from datetime import datetime, date
+import traceback
 import base64
 import pytz
 import os
@@ -890,24 +891,25 @@ def edit_post(post_id):
 def create_post():
 
     if "user_id" not in session:
-
         return jsonify({
-            "success": False
-        })
+            "success": False,
+            "message": "User not logged in"
+        }), 401
 
     try:
 
-        caption = request.form.get(
-            "caption"
-        )
-
         user_id = session["user_id"]
+        caption = request.form.get("caption", "").strip()
+
+        print("USER ID =", user_id)
+        print("CAPTION =", caption)
 
         india_time = datetime.now(
             pytz.timezone("Asia/Kolkata")
         )
 
-        post = (
+        # Create post
+        post_response = (
             supabase.table("posts")
             .insert({
                 "user_id": user_id,
@@ -917,52 +919,64 @@ def create_post():
             .execute()
         )
 
-        post_id = post.data[0]["id"]
+        print("POST RESPONSE =", post_response)
 
+        if not post_response.data:
+            return jsonify({
+                "success": False,
+                "message": "Failed to create post"
+            })
+
+        post_id = post_response.data[0]["id"]
+
+        print("POST ID =", post_id)
+
+        # Handle media upload
         file = request.files.get("media")
 
-        if file:
+        if file and file.filename:
 
             media_bytes = file.read()
 
-            media_data = media_bytes
+            # Store as Base64 string
+            media_data = base64.b64encode(
+                media_bytes
+            ).decode("utf-8")
 
-            supabase.table(
-                "post_media"
-            ).insert({
+            media_response = (
+                supabase.table("post_media")
+                .insert({
+                    "post_id": post_id,
+                    "media_data": media_data,
+                    "media_name": file.filename,
+                    "media_type": file.content_type,
+                    "file_size": len(media_bytes)
+                })
+                .execute()
+            )
 
-                "post_id": post_id,
-
-                "media_data": media_data,
-
-                "media_name": file.filename,
-
-                "media_type": file.content_type,
-
-                "file_size": len(media_bytes)
-
-            }).execute()
+            print("MEDIA RESPONSE =", media_response)
 
         return jsonify({
-            "success": True
+            "success": True,
+            "post_id": post_id
         })
 
     except Exception as e:
 
-        print("POST ERROR =", e)
+        traceback.print_exc()
 
         return jsonify({
             "success": False,
             "message": str(e)
-        })
-
+        }), 500
 
 @app.route("/posts")
 def get_posts():
 
     try:
 
-        posts = (
+        posts_response = (
             supabase.table("posts")
             .select("*")
             .order(
@@ -974,9 +988,10 @@ def get_posts():
 
         result = []
 
-        for post in posts.data:
+        for post in posts_response.data:
 
-            user = (
+            # Get user
+            user_response = (
                 supabase.table("users")
                 .select("username")
                 .eq(
@@ -986,7 +1001,15 @@ def get_posts():
                 .execute()
             )
 
-            media = (
+            username = "Unknown"
+
+            if user_response.data:
+                username = (
+                    user_response.data[0]["username"]
+                )
+
+            # Get media
+            media_response = (
                 supabase.table("post_media")
                 .select("*")
                 .eq(
@@ -999,41 +1022,42 @@ def get_posts():
             media_url = None
             media_type = None
 
-            if media.data:
+            if media_response.data:
 
-                media_url = (
-                    "data:"
-                    + media.data[0]["media_type"]
-                    + ";base64,"
-                    + base64.b64encode(
-                        bytes.fromhex(
-                            media.data[0]["media_data"]
-                        )
-                    ).decode()
-                )
+                media_record = media_response.data[0]
 
                 media_type = (
-                    media.data[0]["media_type"]
+                    media_record["media_type"]
+                )
+
+                media_data = (
+                    media_record["media_data"]
+                )
+
+                # media_data is already Base64
+                media_url = (
+                    f"data:{media_type};base64,{media_data}"
                 )
 
             result.append({
 
                 "id": post["id"],
 
-                "username":
-                user.data[0]["username"],
+                "user_id": post["user_id"],
 
-                "caption":
-                post["caption"],
+                "username": username,
 
-                "created_at":
-                post["created_at"],
+                "caption": post.get(
+                    "caption", ""
+                ),
 
-                "media_url":
-                media_url,
+                "created_at": post.get(
+                    "created_at"
+                ),
 
-                "media_type":
-                media_type
+                "media_url": media_url,
+
+                "media_type": media_type
 
             })
 
@@ -1041,10 +1065,15 @@ def get_posts():
 
     except Exception as e:
 
-        print("LOAD POSTS ERROR =", e)
+        print(
+            "LOAD POSTS ERROR =",
+            str(e)
+        )
+
+        import traceback
+        traceback.print_exc()
 
         return jsonify([])
-
 
 @app.route(
     "/upload_profile_picture",
